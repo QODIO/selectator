@@ -1,0 +1,246 @@
+/**
+ * Selectator jQuery Plugin
+ * A plugin for select elements
+ * version 1.0, Dec 10th, 2013
+ * by Ingi P. Jacobsen
+ */
+
+/* reset */
+.selectator * {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	text-decoration: none;
+}
+.selectator img {
+	display: block;
+}
+
+/* dimmer */
+#selectator_dimmer {
+	background-color: rgba(0,0,0,.1);
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 100;
+}
+
+/* Main box */
+.selectator {
+	border: 1px solid #abadb3;
+	border-radius: 3px;
+	box-sizing: border-box;
+	background-color: #fff;
+	display: inline-block;
+	text-decoration: none;
+}
+.single.selectator {
+	height: 32px;
+}
+
+/* chosen items holder */
+.selectator_chosen_items {
+	display: inline;
+}
+.single .selectator_chosen_items {
+	display: block;
+}
+
+/* chosen item */
+.selectator_chosen_item {
+	display: inline-block;
+	background-color: #39f;
+	border-radius: 2px;
+	color: #fff;
+	padding: 2px 20px 2px 4px;
+	font-size: 13px;
+	margin: 2px;
+	position: relative;
+	vertical-align: top;
+}
+.single .selectator_chosen_item {
+	background-color: transparent;
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 2px;
+}
+/* chosen item - left */
+.selectator_chosen_item_left {
+	float: left;
+	width: 25px;
+}
+.multiple .selectator_chosen_item_left {
+	float: left;
+	width: 22px;
+}
+.selectator_chosen_item_left img {
+	height: 23px;
+}
+.multiple .selectator_chosen_item_left img {
+	height: 18px;
+}
+/* chosen item - title */
+.selectator_chosen_item_title {
+	
+}
+.single .selectator_chosen_item_title {
+	line-height: 22px;
+}
+.multiple .selectator_chosen_item_title {
+	float: left;
+	padding-top: 2px;
+}
+/* chosen item - subtitle */
+.selectator_chosen_item_subtitle {
+	display: none;
+}
+/* chosen item - right */
+.selectator_chosen_item_right {
+	float: right;
+	width: 20px;
+	background-color: #ccc;
+	font-size: 15px;
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	padding: 3px;
+}
+.multiple .selectator_chosen_item_right {
+	display: none;
+}
+
+/* chosen item remove button */
+.single .selectator_chosen_item_remove {
+	display: none;
+}
+.selectator_chosen_item_remove {
+	display: inline-block;
+	font-weight: bold;
+	color: #fff;
+	margin: 0 0 0 5px;
+	padding: 6px 5px 4px 5px;
+	cursor: pointer;
+	font-size: 11px;
+	line-height: 10px;
+	vertical-align: top;
+	border-radius: 0 2px 2px 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.selectator_chosen_item_remove:hover {
+	color: #000;
+	background-color: #8cf;
+}
+
+/* input box */
+.selectator_input,
+.selectator_textlength {
+	border: 0;
+	display: inline-block;
+	margin: 0;
+	background-color: transparent;
+	font-size: 13px;
+	outline: none;
+	padding: 6px 0 0 0;
+}
+.single .selectator_input {
+	border: 1px solid #7f9db9;
+	padding: 3px;
+	border-radius: 3px;
+	position: absolute;
+	bottom: -28px;
+	left: 3px;
+	z-index: 102;
+	background-color: #fff;
+	box-shadow: 0 0 10px #fff;
+}
+.single.results-hidden .selectator_input {
+	opacity: 0;
+	position: absolute;
+	left: -10000px;
+}
+.single.results-visible .selectator_input {
+	opacity: 1;
+}
+
+/* results holder */
+.selectator_results {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #7f9db9;
+	border-radius: 0 0 3px 3px;
+	font-family: sans-serif;
+	position: absolute;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	z-index: 101;
+	background-color: #fff;
+	overflow: auto;
+	max-height: 250px;
+	list-style: none;
+	left: -1px;
+	right: -1px;
+}
+.single .selectator_results {
+	padding-top: 30px;
+}
+.selectator.results-hidden .selectator_results {
+	display: none;
+}
+
+/* result item group header */
+.selectator_group_header {
+	padding: 5px;
+	font-weight: bold;
+}
+
+/* result item group holder */
+.selectator_group {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* result item */
+.selectator_option {
+	padding: 5px;
+	cursor: pointer;
+	color: #000;
+}
+.selectator_option.active {
+	background-color: #39f;
+	color: #fff;
+}
+.selectator_group .selectator_option {
+	padding: 5px 5px 5px 20px;
+}
+/* result item - left */
+.selectator_option_left {
+	float: left;
+}
+.selectator_option_left img {
+	height: 30px;
+}
+/* result item - title */
+.selectator_option_title {
+	margin-left: 35px;
+}
+/* result item - subtitle */
+.selectator_option_subtitle {
+	font-size: 75%;
+	color: #888;
+	margin-left: 35px;
+}
+/* result item - right */
+.selectator_option_right {
+	float: right;
+	width: 30px;
+	background-color: #ccc;
+	font-size: 15px;
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	padding: 6px;
+}
