@@ -23,7 +23,8 @@ $('#selectBox').selectator({
     prefix: 'selectator_',        // CSS class prefix
     height: 'auto',               // auto or element
     useDimmer: false,             // dimms the screen when result list is visible
-    searchCallback: function(){}, // Callback function when enter is pressed and no option is active in multi select box
+    searchCallback: function(){}, // Callback function when enter is pressed and 
+                                  //   no option is active in multi select box
     labels: {
         search: 'Search...'       // Placeholder text in search box in single select box
     }
