@@ -1,7 +1,31 @@
 Selectator
 ==========
-
 Selectator is a jQuery-based replacement for select boxes. It supports searching, and affects the original select box directly, which is used as the data container.
+
+
+Usage
+-----
+###### include in head:
+```html
+<link rel="stylesheet" href="fm.selectator.jquery.css"/>
+<script src="jquery-2.0.3.min.js"></script>
+<script src="fm.selectator.jquery.js"></script>
+```
+
+###### to activate replacement:
+```javascript
+$('#selectBox').selectator();
+```
+
+###### if you want to change settings:
+```javascript
+$('#selectBox').selectator({
+	useDimmer: false,
+	labels: {
+		search: 'Search...'
+	}
+});
+```
 
 
 Browser compatibility
@@ -15,13 +39,11 @@ Browser compatibility
 
 Internationalization
 --------------------
-
 Selectator supports language by setting labels through the plugin options.
 
 
 Copyright and license
 ---------------------
-
 The MIT License (MIT)
 
 Copyright (c) 2013 Ingi P. Jacobsen
