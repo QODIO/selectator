@@ -31,6 +31,18 @@ $('#selectBox').selectator({
 });
 ```
 
+###### Extra attributes for option tags
+By using data-left, data-right and data-subtitle attribute tags you can extend the information shown in the options. These can be styled through css, and are named {prefix_}title, {prefix_}left, {prefix_}right and {prefix_}subtitle. The data in the tags is pure html, so you can even put images there.
+
+```html
+<select id="selectBox">
+    <!-- Normal option tag -->
+    <option id="1">This is the title</option>
+    <!-- Extended option tag -->
+    <option id="2" data-left="This is the left section" data-right="This is the right section" data-subtitle="This is the section under the title">This is the title</option>
+</select>
+```
+
 
 Browser compatibility
 ---------------------
