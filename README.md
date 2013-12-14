@@ -22,7 +22,7 @@ $('#selectBox').selectator();
 $('#selectBox').selectator({
     prefix: 'selectator_',        // CSS class prefix
     height: 'auto',               // auto or element
-    useDimmer: false,             // dimms the screen when result list is visible
+    useDimmer: false,             // dims the screen when result list is visible
     searchCallback: function(){}, // Callback function when enter is pressed and 
                                   //   no option is active in multi select box
     labels: {
@@ -62,13 +62,14 @@ It will be displayed something like this this:
     </tr>
 </table>
 
+
 CSS classes
 -----------
 Here is a list of all the css classes
 
 Class                         | Description
 ----------------------------- | ------------------------------------------------------------------------------
-selectator                    | This is the new select box. It has some extra clases called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `results-visible` and `results-hidden` which tell if the results list is visible or not.
+selectator                    | This is the new select box. It has some extra classes called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `results-visible` and `results-hidden` which tell if the results list is visible or not.
 `prefix_`chosen_items         | The holder for the chosen items.
 `prefix_`chosen_item          | The holder for the chosen item.
 `prefix_`chosen_item_title    | The title of the chosen item.
@@ -87,6 +88,7 @@ selectator                    | This is the new select box. It has some extra cl
 `prefix_`option_right         | The right section of the result option.
 `prefix_`option_subtitle      | The bottom section of the result option.
 `prefix_`dimmer               | This is the dimmer
+
 
 DOM Structure
 -------------
@@ -117,6 +119,24 @@ DOM Structure
             * option_title
             * option_subtitle
         * option...
+
+
+jQuery methods
+--------------
+Method             | Description
+------------------ | -----------
+refreshChosenItems | This method is used internally by the plugin, but you can also call it manually, it is used to refresh the plugin. A scenario where this would be useful is if the data in the original select box is changed by some other script.
+destroy            | This method is used to remove the instance of the plugin from the select box and restore it to its original state.
+
+
+###### Method usage
+```javascript
+$('#selectBox').selectator('refreshChosenItems');
+```
+or 
+```javascript
+$('#selectBox').selectator('destroy');
+```
 
 
 Browser compatibility
