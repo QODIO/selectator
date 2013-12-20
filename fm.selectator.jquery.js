@@ -543,6 +543,7 @@
 	};
 	
 	$.fn.selectator = function(options) {
+		options = options !== undefined ? options : {};
 		return this.each(function () {
 			if (typeof(options) === 'object') {
 				if (undefined === $(this).data('selectator')) {
