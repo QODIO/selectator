@@ -32,6 +32,7 @@
 			prefix: 'selectator_',
 			height: 'auto',
 			useDimmer: false,
+			showAllResultsOnFocus: false,
 			searchCallback: function(){},
 			labels: {
 				search: 'Search...'
@@ -240,7 +241,7 @@
 			$(input_element).bind('focus', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
-				if (!$(results_element).is(':empty') || !multiple) {
+				if (!$(results_element).is(':empty') || !multiple || plugin.settings.showAllResultsOnFocus) {
 					search();
 					showResults();
 				}
@@ -258,7 +259,9 @@
 		// SHOW RESULTS AND DIMMER
 		var showResults = function () {
 			$(box_element).removeClass('results-hidden').addClass('results-visible');
-			$('#' + plugin.settings.prefix + 'dimmer').show();
+			if (plugin.settings.useDimmer) {
+				$('#' + plugin.settings.prefix + 'dimmer').show();
+			}
 			$(results_element).css('top', ($(box_element).outerHeight()-2) + 'px');
 			if ($(box_element).hasClass('single')) {
 				selected_index = $(results_element).find('.' + plugin.settings.prefix + 'option').index($(results_element).find('.' + plugin.settings.prefix + 'option.active'));
@@ -271,7 +274,9 @@
 		// HIDE RESULTS AND DIMMER
 		var hideResults = function () {
 			$(box_element).removeClass('results-visible').addClass('results-hidden');
-			$('#' + plugin.settings.prefix + 'dimmer').hide();
+			if (plugin.settings.useDimmer) {
+				$('#' + plugin.settings.prefix + 'dimmer').hide();
+			}
 		};
 
 
@@ -360,7 +365,7 @@
 		// RESULTS SEARCH METHOD
 		var search = function () {
 			$(results_element).empty();
-			if (input_element.value.replace(/\s/g, '') !== '' || !multiple) {
+			if (input_element.value.replace(/\s/g, '') !== '' || !multiple || plugin.settings.showAllResultsOnFocus) {
 				var optionsArray = [];
 				$(element).children().each(function () {
 					if ($(this).prop('tagName').toLowerCase() === 'optgroup') {
