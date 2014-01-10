@@ -24,6 +24,7 @@ $('#selectBox').selectator({
     prefix: 'selectator_',        // CSS class prefix
     height: 'auto',               // auto or element
     useDimmer: false,             // dims the screen when result list is visible
+    showAllResultsOnFocus: false, // shows all results if input box is empty
     searchCallback: function(){}, // Callback function when enter is pressed and 
                                   //   no option is active in multi select box
     labels: {
