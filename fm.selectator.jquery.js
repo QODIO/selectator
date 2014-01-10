@@ -155,7 +155,7 @@
 			$(box_element).bind('click', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
-				if (!multiple) {
+				if (!multiple || plugin.settings.showAllResultsOnFocus) {
 					showResults();
 				}
 				input_element.focus();
@@ -411,7 +411,7 @@
 				generateResults(optionsArray);
 			}
 			if ($(input_element).is(':focus')) {
-				if (!$(results_element).is(':empty') || !multiple) {
+				if (!$(results_element).is(':empty') || !multiple || plugin.settings.showAllResultsOnFocus) {
 					showResults();
 				} else {
 					hideResults();
