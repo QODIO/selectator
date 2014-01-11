@@ -6,7 +6,7 @@
 
  The MIT License (MIT)
 
- Copyright (c) 2013 Ingi P. Jacobsen
+ Copyright (c) 2013 Faroe Media
 
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
@@ -81,7 +81,7 @@
 			}
 			$(box_element).addClass('selectator ' + (multiple ? 'multiple ' : 'single ') + 'results-hidden');
 			$(box_element).css({
-				width: $(element).outerWidth() + 'px',
+				width: $(element).css('width'),
 				padding: $(element).css('padding'),
 				position: 'relative'
 			});
@@ -109,7 +109,7 @@
 			$(input_element).addClass(plugin.settings.prefix + 'input');
 			if (!multiple) {
 				$(input_element).attr('placeholder', plugin.settings.labels.search);
-				$(input_element).width($(element).outerWidth() - 30);
+				$(input_element).css('width', 'calc(100% - 30px)');
 			} else {
 				$(input_element).width(20);
 			}
@@ -293,6 +293,9 @@
 
 
 		// REFRESH CHOSEN ITEMS
+		plugin.refresh = function () {
+			plugin.refreshChosenItems();
+		};
 		plugin.refreshChosenItems = function () {
 			$(chosenitems_element).empty();
 			$(element).find('option').each(function () {
@@ -335,6 +338,7 @@
 						e.preventDefault();
 						e.stopPropagation();
 						$(this).data('element').selected = false;
+						$(element).trigger('change');
 						plugin.refreshChosenItems();
 					});
 					$(button_remove_element).html('X');
@@ -524,6 +528,7 @@
 		// SELECT ACTIVE ITEM
 		var selectItem = function () {
 			$(results_element).find('.' + plugin.settings.prefix + 'option').eq(selected_index).data('element').selected = true;
+			$(element).trigger('change');
 			plugin.refreshChosenItems();
 			$(input_element).val('');
 			box_element.focus();
