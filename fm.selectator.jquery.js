@@ -156,7 +156,8 @@
 				e.preventDefault();
 				e.stopPropagation();
 				if (!multiple || plugin.settings.showAllResultsOnFocus) {
-					showResults();
+					//showResults();
+					search();
 				}
 				input_element.focus();
 			});
