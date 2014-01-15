@@ -23,8 +23,8 @@ $('#selectBox').selectator();
 $('#selectBox').selectator({
     prefix: 'selectator_',        // CSS class prefix
     height: 'auto',               // auto or element
-    useDimmer: false,             // dims the screen when result list is visible
-    showAllResultsOnFocus: false, // shows all results if input box is empty
+    useDimmer: false,             // dims the screen when option list is visible
+    showAllOptionsOnFocus: false, // shows all options if input box is empty
     searchCallback: function(){}, // Callback function when enter is pressed and 
                                   //   no option is active in multi select box
     labels: {
@@ -71,7 +71,7 @@ Here is a list of all the css classes
 
 Class                         | Description
 ----------------------------- | ------------------------------------------------------------------------------
-selectator                    | This is the new select box. It has some extra classes called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `results-visible` and `results-hidden` which tell if the results list is visible or not.
+selectator                    | This is the new select box. It has some extra classes called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `options-visible` and `options-hidden` which tell if the options list is visible or not.
 `prefix_`chosen_items         | The holder for the chosen items.
 `prefix_`chosen_item          | The holder for the chosen item.
 `prefix_`chosen_item_title    | The title of the chosen item.
@@ -79,9 +79,9 @@ selectator                    | This is the new select box. It has some extra cl
 `prefix_`chosen_item_right    | The right section of the chosen item.
 `prefix_`chosen_item_subtitle | The bottom section of the chosen item.
 `prefix_`chosen_item_remove   | The remove button for the chosen item.
-`prefix_`input                | This is the input box for the selectator. This is used together with `results-visible` or `results-hidden` to show and style it differently if it is a multiple selection box or a single selection box.
+`prefix_`input                | This is the input box for the selectator. This is used together with `options-visible` or `options-hidden` to show and style it differently if it is a multiple selection box or a single selection box.
 `prefix_`textlength           | This is used to calculate the size of the input box for the multiple selection box.
-`prefix_`results              | The results list holder. This is used together with `results-visible` or `results-hidden` to show or hide the results.
+`prefix_`options              | The options list holder. This is used together with `options-visible` or `options-hidden` to show or hide the options.
 `prefix_`group_header         | This is the group title option.
 `prefix_`group                | This is the group options holder.
 `prefix_`option               | This is a result option. It has an extra class called `active` which tells if the option is the active one.
@@ -95,7 +95,7 @@ selectator                    | This is the new select box. It has some extra cl
 DOM Structure
 -------------
 * dimmer
-* selectator: *containing the `single`|`multiple` class and the `results-visible`|`results-hidden` class*
+* selectator: *containing the `single`|`multiple` class and the `options-visible`|`options-hidden` class*
     * textlength
     * chosen_items
         * chosen_item
@@ -106,7 +106,7 @@ DOM Structure
             * chosen_item_remove
         * chosen_item...
     * input
-    * results
+    * options
         * group_header
         * group
             * option: *containing the `active` class*

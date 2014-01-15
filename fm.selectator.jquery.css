@@ -156,17 +156,17 @@
 	background-color: #fff;
 	box-shadow: 0 0 10px #fff;
 }
-.single.results-hidden .selectator_input {
+.single.options-hidden .selectator_input {
 	opacity: 0;
 	position: absolute;
 	left: -10000px;
 }
-.single.results-visible .selectator_input {
+.single.options-visible .selectator_input {
 	opacity: 1;
 }
 
-/* results holder */
-.selectator_results {
+/* options holder */
+.selectator_options {
 	margin: 0;
 	padding: 0;
 	border: 1px solid #7f9db9;
@@ -183,27 +183,27 @@
 	left: -1px;
 	right: -1px;
 }
-.single .selectator_results {
+.single .selectator_options {
 	padding-top: 30px;
 }
-.selectator.results-hidden .selectator_results {
+.selectator.options-hidden .selectator_options {
 	display: none;
 }
 
-/* result item group header */
+/* option item group header */
 .selectator_group_header {
 	padding: 5px;
 	font-weight: bold;
 }
 
-/* result item group holder */
+/* option item group holder */
 .selectator_group {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-/* result item */
+/* option item */
 .selectator_option {
 	padding: 5px;
 	cursor: pointer;
@@ -216,24 +216,24 @@
 .selectator_group .selectator_option {
 	padding: 5px 5px 5px 20px;
 }
-/* result item - left */
+/* option item - left */
 .selectator_option_left {
 	float: left;
 }
 .selectator_option_left img {
 	height: 30px;
 }
-/* result item - title */
+/* option item - title */
 .selectator_option_title {
 	margin-left: 35px;
 }
-/* result item - subtitle */
+/* option item - subtitle */
 .selectator_option_subtitle {
 	font-size: 75%;
 	color: #888;
 	margin-left: 35px;
 }
-/* result item - right */
+/* option item - right */
 .selectator_option_right {
 	float: right;
 	width: 30px;
