@@ -240,6 +240,7 @@
 				if ($(box_element).hasClass('options-hidden') && (keyCode === key.left || keyCode === key.right || keyCode === key.up || keyCode === key.down)) {
 					search();
 				}
+				resizeInput();
 			});
 			$(input_element).bind('focus', function (e) {
 				e.preventDefault();
@@ -382,7 +383,7 @@
 				generateOptions(optionsArray);
 			}
 			if ($(input_element).is(':focus')) {
-				if (!$(options_element).is(':empty') || !multiple || plugin.settings.showAllOptionsOnFocus) {
+				if (!$(options_element).is(':empty') || !multiple) {
 					showOptions();
 				} else {
 					hideOptions();
@@ -488,11 +489,14 @@
 
 		// SHOW OPTIONS AND DIMMER
 		var showOptions = function () {
+			console.log('showOptions');
 			$(box_element).removeClass('options-hidden').addClass('options-visible');
 			if (plugin.settings.useDimmer) {
 				$('#' + plugin.settings.prefix + 'dimmer').show();
 			}
-			$(options_element).css('top', ($(box_element).outerHeight()-2) + 'px');
+			setTimeout(function () {
+				$(options_element).css('top', ($(box_element).outerHeight()-2) + 'px');
+			}, 1); 
 			if ($(box_element).hasClass('single')) {
 				selected_index = $(options_element).find('.' + plugin.settings.prefix + 'option').index($(options_element).find('.' + plugin.settings.prefix + 'option.active'));
 			}
