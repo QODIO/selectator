@@ -125,7 +125,7 @@
 			//// ================== BIND ELEMENTS EVENTS ================== ////
 			// source element
 			$(element).change(function () {
-				plugin.refreshSelectedOptions();
+				refreshSelectedOptions();
 			});
 			// box element
 			$(box_element).bind('focus', function (e) {
@@ -219,7 +219,7 @@
 						if (input_element.value === '') {
 							$(element).find('option:selected').last()[0].selected = false;
 							$(element).trigger('change');
-							plugin.refreshSelectedOptions();
+							refreshSelectedOptions();
 							search();
 						}
 						resizeInput();
@@ -256,7 +256,7 @@
 				e.stopPropagation();
 				hideOptions();
 			});
-			plugin.refreshSelectedOptions();
+			refreshSelectedOptions();
 		};
 
 
@@ -273,9 +273,9 @@
 
 		// REFRESH SELECTED OPTIONS
 		plugin.refresh = function () {
-			plugin.refreshSelectedOptions();
+			refreshSelectedOptions();
 		};
-		plugin.refreshSelectedOptions = function () {
+		var refreshSelectedOptions = function () {
 			$(chosenitems_element).empty();
 			$(element).find('option').each(function () {
 				if (this.selected) {
@@ -318,7 +318,7 @@
 						e.stopPropagation();
 						$(this).data('element').selected = false;
 						$(element).trigger('change');
-						plugin.refreshSelectedOptions();
+						refreshSelectedOptions();
 					});
 					$(button_remove_element).html('X');
 					$(item_element).append(button_remove_element);
@@ -482,14 +482,11 @@
 				e.stopPropagation();
 				selectOption();
 			});
-
-
 			return option;
 		};
 
 		// SHOW OPTIONS AND DIMMER
 		var showOptions = function () {
-			console.log('showOptions');
 			$(box_element).removeClass('options-hidden').addClass('options-visible');
 			if (plugin.settings.useDimmer) {
 				$('#' + plugin.settings.prefix + 'dimmer').show();
@@ -532,7 +529,7 @@
 		var selectOption = function () {
 			$(options_element).find('.' + plugin.settings.prefix + 'option').eq(selected_index).data('element').selected = true;
 			$(element).trigger('change');
-			plugin.refreshSelectedOptions();
+			refreshSelectedOptions();
 			$(input_element).val('');
 			box_element.focus();
 			hideOptions();

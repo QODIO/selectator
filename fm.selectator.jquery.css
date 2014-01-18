@@ -36,6 +36,14 @@
 .single.selectator {
 	height: 32px;
 }
+.selectator:after {
+	position: absolute;
+	content: '▼';
+	font-size: 90%;
+	right: 4px;
+	top: 6px;
+	color: #aaa;
+}
 
 /* chosen items holder */
 .selectator_chosen_items {
@@ -62,7 +70,7 @@
 	color: #000;
 	display: block;
 	text-decoration: none;
-	padding: 2px;
+	padding: 0;
 }
 /* chosen item - left */
 .selectator_chosen_item_left {
@@ -177,7 +185,7 @@
 	-moz-box-sizing: border-box;
 	z-index: 101;
 	background-color: #fff;
-	overflow: auto;
+	overflow-y: scroll;
 	max-height: 250px;
 	list-style: none;
 	left: -1px;
