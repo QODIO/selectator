@@ -33,13 +33,15 @@
 			height: 'auto',
 			useDimmer: false,
 			showAllOptionsOnFocus: false,
+			selectFirstOptionOnSearch: true,
 			searchCallback: function(){},
 			labels: {
 				search: 'Search...'
 			}
 		};
-	
+
 		var plugin = this;
+		plugin.settings = {};
 		var multiple = $(element).attr('multiple') !== undefined;
 		var selected_index = multiple ? -1 : 0;
 		var box_element = null;
@@ -56,7 +58,6 @@
 			right: 39,
 			down: 40
 		};
-		plugin.settings = {};
 
 		
 		
@@ -336,6 +337,9 @@
 
 		// OPTIONS SEARCH METHOD
 		var search = function () {
+			if (multiple) {
+				selected_index = plugin.settings.selectFirstOptionOnSearch ? (input_element.value.replace(/\s/g, '') !== '' ? 0 : -1) : -1;
+			}
 			$(options_element).empty();
 			if (input_element.value.replace(/\s/g, '') !== '' || !multiple || plugin.settings.showAllOptionsOnFocus) {
 				var optionsArray = [];
@@ -391,10 +395,6 @@
 			} else {
 				hideOptions();
 			}
-			if (multiple) {
-				selected_index = -1;
-			}
-
 		};
 
 		// GENERATE OPTIONS
