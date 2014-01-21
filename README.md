@@ -144,11 +144,11 @@ $('#selectBox').selectator('destroy');
 
 Browser compatibility
 ---------------------
-* IE ???
-* Chrome 8+
-* Firefox ???
-* Safari ???
-* Opera ???
+* IE 8+
+* Chrome 2+
+* Firefox 3.5+
+* Safari 4+
+* Opera 11+
 
 
 Internationalization
