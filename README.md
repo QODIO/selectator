@@ -40,9 +40,9 @@ By using `data-left`, `data-right` and `data-subtitle` attribute tags you can ex
 ```html
 <select id="selectBox">
     <!-- Normal option tag -->
-    <option id="1">This is the title</option>
+    <option value="1">This is the title</option>
     <!-- Extended option tag -->
-    <option id="2" data-left="This is the left section" data-right="This is the right section" data-subtitle="This is the section under the title">This is the title</option>
+    <option value="2" data-left="This is the left section" data-right="This is the right section" data-subtitle="This is the section under the title">This is the title</option>
 </select>
 ```
 It will be displayed something like this this:
