@@ -9,19 +9,31 @@
 			margin: 0;
 			padding: 0;
 		}
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
 		#wrapper {
 			padding: 15px;
 		}
 		#select1 {
-			width: 200px;
+			width: 250px;
 		}
 		#select2 {
 			padding: 5px;
-			width: 300px;
+			width: 350px;
 			height: 200px;
 		}
 		#select3 {
-			width: 300px;
+			width: 350px;
+			height: 50px;
+		}		
+		#select4 {
+			width: 350px;
+			height: 50px;
+		}		
+		#select5 {
+			width: 350px;
 			height: 50px;
 		}		
 	</style>
@@ -29,59 +41,90 @@
 	<script src="fm.selectator.jquery.js"></script>
 	<script>
 		$(function () {
-			$('#activate_selectator1').click(function () {
-				if ($('#select1').data('selectator') === undefined) {
-					$('#select1').selectator({
-						useDimmer: false,
+			var $activate_selectator1 = $('#activate_selectator1');
+			$activate_selectator1.click(function () {
+				var $select1 = $('#select1');
+				if ($select1.data('selectator') === undefined) {
+					$select1.selectator({
 						labels: {
-							search: 'Search...'
+							search: 'Search here...'
 						}
 					});
-					$('#activate_selectator1').val('destroy selectator');
+					$activate_selectator1.val('destroy selectator');
 				} else {
-					$('#select1').selectator('destroy');
-					$('#activate_selectator1').val('activate selectator');
+					$select1.selectator('destroy');
+					$activate_selectator1.val('activate selectator');
 				}
 			});
-			$('#activate_selectator1').trigger('click');
+			$activate_selectator1.trigger('click');
 
-			$('#activate_selectator2').click(function () {
-				if ($('#select2').data('selectator') === undefined) {
-					$('#select2').selectator({
-						useDimmer: false,
-						showAllOptionsOnFocus: true,
-						labels: {
-							search: 'Search...'
-						}
+			var $activate_selectator2 = $('#activate_selectator2');
+			$activate_selectator2.click(function () {
+				var $select2 = $('#select2');
+				if ($select2.data('selectator') === undefined) {
+					$select2.selectator({
+						useDimmer: true
 					});
-					$('#activate_selectator2').val('destroy selectator');
+					$activate_selectator2.val('destroy selectator');
 				} else {
-					$('#select2').selectator('destroy');
-					$('#activate_selectator2').val('activate selectator');
+					$select2.selectator('destroy');
+					$activate_selectator2.val('activate selectator');
 				}
 			});
-			$('#activate_selectator2').trigger('click');
+			$activate_selectator2.trigger('click');
 
-			$('#activate_selectator3').click(function () {
-				if ($('#select3').data('selectator') === undefined) {
-					$('#select3').selectator({
-						useDimmer: true,
-						labels: {
-							search: 'Search...'
-						}
+			var $activate_selectator3 = $('#activate_selectator3');
+			$activate_selectator3.click(function () {
+				var $select3 = $('#select3');
+				if ($select3.data('selectator') === undefined) {
+					$select3.selectator({
+						useSearch: false
 					});
-					$('#activate_selectator3').val('destroy selectator');
+					$activate_selectator3.val('destroy selectator');
 				} else {
-					$('#select3').selectator('destroy');
-					$('#activate_selectator3').val('activate selectator');
+					$select3.selectator('destroy');
+					$activate_selectator3.val('activate selectator');
 				}
 			});
-			$('#activate_selectator3').trigger('click');
+			$activate_selectator3.trigger('click');
+
+			var $activate_selectator4 = $('#activate_selectator4');
+			$activate_selectator4.click(function () {
+				var $select4 = $('#select4');
+				if ($select4.data('selectator') === undefined) {
+					$select4.selectator({
+						showAllOptionsOnFocus: true
+					});
+					$activate_selectator4.val('destroy selectator');
+				} else {
+					$select4.selectator('destroy');
+					$activate_selectator4.val('activate selectator');
+				}
+			});
+			$activate_selectator4.trigger('click');
+
+			var $activate_selectator5 = $('#activate_selectator5');
+			$activate_selectator5.click(function () {
+				var $select5 = $('#select5');
+				if ($select5.data('selectator') === undefined) {
+					$select5.selectator({
+						useSearch: false
+					});
+					$activate_selectator5.val('destroy selectator');
+				} else {
+					$select5.selectator('destroy');
+					$activate_selectator5.val('activate selectator');
+				}
+			});
+			$activate_selectator5.trigger('click');
 		});
 	</script>
 </head>
 <body>
 	<div id="wrapper">
+		<label for="select1">
+			Singular select with custom content:
+		</label>
 		<select id="select1" name="select1">
 			<option value="">&nbsp;</option>
 			<option value="1" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
@@ -118,7 +161,36 @@
 		<input value="activate selectator" id="activate_selectator1" type="button">
 		<br>
 		<br>
-		<select id="select2" name="select2" multiple>
+
+
+		<label for="select2">
+			Singular select with dimmer:
+		</label>
+		<select id="select2" name="select2">
+			<option value="1">One</option>
+			<option value="2">Two</option>
+		</select>
+		<input value="activate selectator" id="activate_selectator2" type="button">
+		<br>
+		<br>
+
+
+		<label for="select3">
+			Singular select without search:
+		</label>
+		<select id="select3" name="select3">
+			<option value="1">One</option>
+			<option value="2">Two</option>
+		</select>
+		<input value="activate selectator" id="activate_selectator3" type="button">
+		<br>
+		<br>
+
+
+		<label for="select4">
+			Multi select with custom content:
+		</label>
+		<select id="select4" name="select4" multiple>
 			<optgroup label="Group one">
 				<option value="1" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
 				<option value="2" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
@@ -140,14 +212,37 @@
 			<option value="13">Thirteen</option>
 			<option value="14">Fourteen</option>
 		</select>
-		<input value="activate selectator" id="activate_selectator2" type="button">
+		<input value="activate selectator" id="activate_selectator4" type="button">
 		<br>
 		<br>
-		<select id="select3" name="select3">
-			<option value="1">One</option>
-			<option value="2">Two</option>
+
+
+		<label for="select5">
+			Multi select with custom content and without search:
+		</label>
+		<select id="select5" name="select5" multiple>
+			<optgroup label="Group one">
+				<option value="1" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
+				<option value="2" selected  data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
+			</optgroup>
+			<optgroup label="Group two">
+				<option value="3" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
+				<option value="4" data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
+				<option value="5" data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
+				<option value="6">Six</option>
+			</optgroup>
+			<optgroup label="Group three">
+				<option value="7">Seven</option>
+			</optgroup>
+			<option value="8" data-subtitle="Otte">Eight</option>
+			<option value="9">Nine</option>
+			<option value="10">Ten</option>
+			<option value="11">Eleven</option>
+			<option value="12">Twelve</option>
+			<option value="13" selected>Thirteen</option>
+			<option value="14">Fourteen</option>
 		</select>
-		<input value="activate selectator" id="activate_selectator3" type="button">
+		<input value="activate selectator" id="activate_selectator5" type="button">
 
 	</div>
 

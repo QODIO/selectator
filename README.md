@@ -24,6 +24,7 @@ $('#selectBox').selectator({
     prefix: 'selectator_',           // CSS class prefix
     height: 'auto',                  // auto or element
     useDimmer: false,                // dims the screen when option list is visible
+    useSearch: true,                 // if false, the search boxes are removed and `showAllOptionsOnFocus` is forced to true
     showAllOptionsOnFocus: false,    // shows all options if input box is empty
     selectFirstOptionOnSearch: true, // selects the topmost option on every search
     searchCallback: function(){},    // Callback function when enter is pressed and 

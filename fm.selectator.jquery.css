@@ -112,6 +112,7 @@
 	text-align: center;
 	border-radius: 3px;
 	padding: 3px;
+	margin-right: 20px;
 }
 .multiple .selectator_chosen_item_right {
 	display: none;
@@ -172,6 +173,9 @@
 .single.options-visible .selectator_input {
 	opacity: 1;
 }
+.disable_search .selectator_input {
+	opacity: 0;
+}
 
 /* options holder */
 .selectator_options {
@@ -193,6 +197,9 @@
 }
 .single .selectator_options {
 	padding-top: 30px;
+}
+.single.disable_search .selectator_options {
+	padding-top: 0;
 }
 .selectator.options-hidden .selectator_options {
 	display: none;
