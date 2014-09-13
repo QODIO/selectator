@@ -357,9 +357,7 @@
 
 		// OPTIONS SEARCH METHOD
 		var search = function () {
-			if (multiple) {
-				selected_index = plugin.settings.selectFirstOptionOnSearch ? ($input_element.val().replace(/\s/g, '') !== '' ? 0 : -1) : -1;
-			}
+			selected_index = plugin.settings.selectFirstOptionOnSearch ? ($input_element.val().replace(/\s/g, '') !== '' ? 0 : -1) : -1;
 			$options_element.empty();
 			if ($input_element.val().replace(/\s/g, '') !== '' || !multiple || plugin.settings.showAllOptionsOnFocus || !plugin.settings.useSearch) {
 				var optionsArray = [];
@@ -444,9 +442,7 @@
 					$options_element.append(option);
 				}
 			});
-			if (multiple) {
-				refreshActiveOption();
-			}
+			refreshActiveOption();
 		};
 
 		// CREATE RESULT OPTION
