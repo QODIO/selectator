@@ -88,6 +88,7 @@
 			}
 			$box_element.css({
 				width: $source_element.css('width'),
+				minHeight: $source_element.css('height'),
 				padding: $source_element.css('padding'),
 				position: 'relative'
 			});
@@ -116,19 +117,18 @@
 			if (!plugin.settings.useSearch) {
 				$input_element.attr('readonly', true);
 				$input_element.css({
-					'opacity': 0,
+					/*'opacity': 0,*/
 					'width': '0px',
 					'height': '0px',
 					'overflow': 'hidden',
 					'border': 0,
 					'padding': 0,
-					'left': '-10000px',
+					/*'left': '-10000px',*/
 					'position': 'absolute'
 				});
 			} else {
 				if (!multiple) {
 					$input_element.attr('placeholder', plugin.settings.labels.search);
-					$input_element.css('width', 'calc(100% - 30px)');
 				} else {
 					$input_element.width(20);
 				}
@@ -508,7 +508,7 @@
 				$('#' + plugin.settings.prefix + 'dimmer').show();
 			}
 			setTimeout(function () {
-				$options_element.css('top', ($box_element.outerHeight()-2) + 'px');
+				$options_element.css('top', ($box_element.outerHeight() + (multiple ? 0 : $input_element.outerHeight()) -2) + 'px');
 			}, 1); 
 			if ($box_element.hasClass('single')) {
 				selected_index = $options_element.find('.' + plugin.settings.prefix + 'option').index($options_element.find('.' + plugin.settings.prefix + 'option.active'));
