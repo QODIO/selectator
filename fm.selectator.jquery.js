@@ -117,13 +117,11 @@
 			if (!plugin.settings.useSearch) {
 				$input_element.attr('readonly', true);
 				$input_element.css({
-					/*'opacity': 0,*/
 					'width': '0px',
 					'height': '0px',
 					'overflow': 'hidden',
 					'border': 0,
 					'padding': 0,
-					/*'left': '-10000px',*/
 					'position': 'absolute'
 				});
 			} else {
