@@ -35,6 +35,7 @@
 			useSearch: true,
 			showAllOptionsOnFocus: false,
 			selectFirstOptionOnSearch: true,
+			keepOpen: false,
 			searchCallback: function(){},
 			labels: {
 				search: 'Search...'
@@ -546,7 +547,9 @@
 			refreshSelectedOptions();
 			$input_element.val('');
 			$box_element.focus();
-			hideOptions();
+			if (!settings.keepOpen) {
+				hideOptions();
+			}
 		};
 
 
