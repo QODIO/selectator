@@ -547,7 +547,7 @@
 			refreshSelectedOptions();
 			$input_element.val('');
 			$box_element.focus();
-			if (!settings.keepOpen) {
+			if (!plugin.settings.keepOpen) {
 				hideOptions();
 			}
 		};
