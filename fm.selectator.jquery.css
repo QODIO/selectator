@@ -42,7 +42,8 @@
 }
 .selectator:after {
 	position: absolute;
-	content: '▼';
+	cursor: pointer;
+	content: '\25BC';
 	font-size: 90%;
 	right: 4px;
 	color: #aaa;
