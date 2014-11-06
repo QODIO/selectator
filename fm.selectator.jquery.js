@@ -302,6 +302,10 @@
 					$item_element.addClass(plugin.settings.prefix + 'chosen_item');
 					//$item_element.html($option.html());
 
+					// class
+					if ($option.attr('class') !== undefined) {
+						$item_element.addClass($option.attr('class'));
+					}
 					// left
 					if ($option.data('left') !== undefined) {
 						var $left_element = $(document.createElement('div'));
@@ -421,10 +425,16 @@
 				if (this.type === 'group') {
 					var $group_header_element = $(document.createElement('li'));
 					$group_header_element.addClass(plugin.settings.prefix + 'group_header');
+					if ($(this.element).attr('class') !== undefined) {
+						$group_header_element.addClass($(this.element).attr('class'));
+					}
 					$group_header_element.html($(this.element).attr('label'));
 					$options_element.append($group_header_element);
 
 					var $group = $(document.createElement('ul'));
+					if ($(this).attr('class') !== undefined) {
+						$group.addClass($(this).attr('class'));
+					}
 					$group.addClass(plugin.settings.prefix + 'group');
 					$options_element.append($group);
 
@@ -453,6 +463,10 @@
 			$option.addClass(plugin.settings.prefix + 'option');
 			if (this.selected) {
 				$option.addClass('active');
+			}
+			// class
+			if ($(this).attr('class') !== undefined) {
+				$option.addClass($(this).attr('class'));
 			}
 			// left
 			if ($(this).data('left') !== undefined) {
