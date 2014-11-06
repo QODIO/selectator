@@ -454,6 +454,10 @@
 			if (this.selected) {
 				$option.addClass('active');
 			}
+            // custom class
+            if ($(this).data('class') !== undefined) {
+                $option.addClass(plugin.settings.prefix + 'option_' + $(this).data('class'));
+            }
 			// left
 			if ($(this).data('left') !== undefined) {
 				var $left_element = $(document.createElement('div'));
