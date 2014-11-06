@@ -455,8 +455,12 @@
 				$option.addClass('active');
 			}
 			// custom class
-			if ($(this).data('class') !== undefined) {
-				$option.addClass(plugin.settings.prefix + 'option_' + $(this).data('class'));
+			if ($(this).attr('class') !== undefined) {
+				$.each($(this).attr('class').split(' '), function() {
+					if(this != '') {
+						$option.addClass(plugin.settings.prefix + 'option_' + this);
+					}
+				});
 			}
 			// left
 			if ($(this).data('left') !== undefined) {
