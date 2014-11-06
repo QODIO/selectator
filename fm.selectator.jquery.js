@@ -454,6 +454,14 @@
 			if (this.selected) {
 				$option.addClass('active');
 			}
+			// custom class
+			if ($(this).attr('class') !== undefined) {
+				$.each($(this).attr('class').split(' '), function() {
+					if(this != '') {
+						$option.addClass(plugin.settings.prefix + 'option_' + this);
+					}
+				});
+			}
 			// left
 			if ($(this).data('left') !== undefined) {
 				var $left_element = $(document.createElement('div'));
