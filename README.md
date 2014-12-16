@@ -21,19 +21,19 @@ $('#selectBox').selectator();
 ###### if you want to change settings:
 ```javascript
 $('#selectBox').selectator({
-    prefix: 'selectator_',           // CSS class prefix
-    height: 'auto',                  // auto or element
-    useDimmer: false,                // dims the screen when option list is visible
-    useSearch: true,                 // if false, the search boxes are removed and 
-                                     //   `showAllOptionsOnFocus` is forced to true
-    keepOpen: false,                 // if true, then the dropdown will not close when 
-                                     //   selecting options, but stay open until losing focus
-    showAllOptionsOnFocus: false,    // shows all options if input box is empty
-    selectFirstOptionOnSearch: true, // selects the topmost option on every search
-    searchCallback: function(){},    // Callback function when enter is pressed and 
-                                     //   no option is active in multi select box
+    prefix: 'selectator_',             // CSS class prefix
+    height: 'auto',                    // auto or element
+    useDimmer: false,                  // dims the screen when option list is visible
+    useSearch: true,                   // if false, the search boxes are removed and 
+                                       //   `showAllOptionsOnFocus` is forced to true
+    keepOpen: false,                   // if true, then the dropdown will not close when 
+                                       //   selecting options, but stay open until losing focus
+    showAllOptionsOnFocus: false,      // shows all options if input box is empty
+    selectFirstOptionOnSearch: true,   // selects the topmost option on every search
+    searchCallback: function(value){}, // Callback function when enter is pressed and 
+                                       //   no option is active in multi select box
     labels: {
-        search: 'Search...'          // Placeholder text in search box in single select box
+        search: 'Search...'            // Placeholder text in search box in single select box
     }
 });
 ```

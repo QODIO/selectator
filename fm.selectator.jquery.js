@@ -1,7 +1,7 @@
 /*
  Selectator jQuery Plugin
  A plugin for select elements
- version 1.1, Dec 10th, 2013
+ version 1.1.1, Dec 10th, 2013
  by Ingi P. Jacobsen
 
  The MIT License (MIT)
@@ -91,6 +91,7 @@
 				width: $source_element.css('width'),
 				minHeight: $source_element.css('height'),
 				padding: $source_element.css('padding'),
+				'flex-grow': $source_element.css('flex-grow'),
 				position: 'relative'
 			});
 			if (plugin.settings.height === 'element') {
@@ -228,7 +229,7 @@
 							selectOption();
 						} else {
 							if ($input_element.val() !== '') {
-								plugin.settings.searchCallback();
+								plugin.settings.searchCallback($input_element.val());
 							}
 						}
 						resizeInput();
