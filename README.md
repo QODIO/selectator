@@ -32,6 +32,7 @@ $('#selectBox').selectator({
     selectFirstOptionOnSearch: true, // selects the topmost option on every search
     searchCallback: function(){},    // Callback function when enter is pressed and 
                                      //   no option is active in multi select box
+    selectOptionCallback: function(value){},//Callback function when option is select
     labels: {
         search: 'Search...'          // Placeholder text in search box in single select box
     }
