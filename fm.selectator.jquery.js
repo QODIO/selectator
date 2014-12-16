@@ -37,6 +37,7 @@
 			selectFirstOptionOnSearch: true,
 			keepOpen: false,
 			searchCallback: function(){},
+			selectOptionCallback: function(){},
 			labels: {
 				search: 'Search...'
 			}
@@ -559,6 +560,7 @@
 			$options_element.find('.' + plugin.settings.prefix + 'option').eq(selected_index).data('element').selected = true;
 			$source_element.trigger('change');
 			refreshSelectedOptions();
+			plugin.settings.selectOptionCallback($source_element.val());
 			$input_element.val('');
 			$box_element.focus();
 			if (!plugin.settings.keepOpen) {
