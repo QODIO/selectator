@@ -45,7 +45,7 @@
 		var plugin = this;
 		plugin.settings = {};
 		var $source_element = $(element);
-		var $box_element = null;
+		var $container_element = null;
 		var $chosenitems_element = null;
 		var $input_element = null;
 		var $textlength_element = null;
@@ -78,16 +78,16 @@
 					$(document.body).prepend($dimmer_element);
 				}
 			}
-			// box element
-			$box_element = $(document.createElement('div'));
+			// container element
+			$container_element = $(document.createElement('div'));
 			if ($source_element.attr('id') !== undefined) {
-				$box_element.attr('id', plugin.settings.prefix + $source_element.attr('id'));
+				$container_element.attr('id', plugin.settings.prefix + $source_element.attr('id'));
 			}
-			$box_element.addClass('selectator ' + (multiple ? 'multiple ' : 'single ') + 'options-hidden');
+			$container_element.addClass('selectator ' + (multiple ? 'multiple ' : 'single ') + 'options-hidden');
 			if (!plugin.settings.useSearch) {
-				$box_element.addClass('disable_search');
+				$container_element.addClass('disable_search');
 			}
-			$box_element.css({
+			$container_element.css({
 				width: $source_element.css('width'),
 				minHeight: $source_element.css('height'),
 				padding: $source_element.css('padding'),
@@ -95,11 +95,11 @@
 				position: 'relative'
 			});
 			if (plugin.settings.height === 'element') {
-				$box_element.css({
+				$container_element.css({
 					height: $source_element.outerHeight() + 'px'
 				});
 			}
-			$source_element.after($box_element);
+			$source_element.after($container_element);
 			$source_element.hide();
 			// textlength element
 			$textlength_element = $(document.createElement('span'));
@@ -108,11 +108,11 @@
 				position: 'absolute',
 				visibility: 'hidden'
 			});
-			$box_element.append($textlength_element);
+			$container_element.append($textlength_element);
 			// chosen items element
 			$chosenitems_element = $(document.createElement('div'));
 			$chosenitems_element.addClass(plugin.settings.prefix + 'chosen_items');
-			$box_element.append($chosenitems_element);
+			$container_element.append($chosenitems_element);
 			// input element
 			$input_element = $(document.createElement('input'));
 			$input_element.addClass(plugin.settings.prefix + 'input');
@@ -134,26 +134,26 @@
 				}
 			}
 			$input_element.attr('autocomplete', 'false');
-			$box_element.append($input_element);
+			$container_element.append($input_element);
 			// options element
 			$options_element = $(document.createElement('ul'));
 			$options_element.addClass(plugin.settings.prefix + 'options');
 
-			$box_element.append($options_element);
+			$container_element.append($options_element);
 
 			//// ================== BIND ELEMENTS EVENTS ================== ////
 			// source element
 			$source_element.change(function () {
 				refreshSelectedOptions();
 			});
-			// box element
-			$box_element.bind('focus', function (e) {
+			// container element
+			$container_element.on('focus', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				showOptions();
 				$input_element.focus();
 			});
-			$box_element.bind('mousedown', function (e) {
+			$container_element.on('mousedown', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				$input_element.focus();
@@ -168,11 +168,11 @@
 					range.select();
 				}
 			});
-			$box_element.bind('mouseup', function (e) {
+			$container_element.on('mouseup', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 			});
-			$box_element.bind('click', function (e) {
+			$container_element.on('click', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				if (!multiple || plugin.settings.showAllOptionsOnFocus || !plugin.settings.useSearch) {
@@ -181,22 +181,22 @@
 				}
 				$input_element.focus();
 			});
-			$box_element.bind('dblclick', function (e) {
+			$container_element.on('dblclick', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				$input_element.focus();
 				$input_element.select();
 			});
 			// input element
-			$input_element.bind('click', function (e) {
+			$input_element.on('click', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 			});
-			$input_element.bind('dblclick', function (e) {
+			$input_element.on('dblclick', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 			});
-			$input_element.bind('keydown', function (e) {
+			$input_element.on('keydown', function (e) {
 				e.stopPropagation();
 				var keyCode = e.keyCode || e.which;
 				switch (keyCode) {
@@ -248,21 +248,25 @@
 						break;
 				}
 			});
-			$input_element.bind('keyup', function (e) {
+			$input_element.on('keyup', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				var keyCode = e.keyCode || e.which;
-				if (keyCode === key.escape || keyCode === key.enter) {
+				if (keyCode === key.escape) {
 					hideOptions();
+				} else if (keyCode === key.enter) {
+					if (!plugin.settings.keepOpen) {
+						hideOptions();
+					}
 				} else if (keyCode < 37 || keyCode > 40) {
 					search();
 				}
-				if ($box_element.hasClass('options-hidden') && (keyCode === key.left || keyCode === key.right || keyCode === key.up || keyCode === key.down)) {
+				if ($container_element.hasClass('options-hidden') && (keyCode === key.left || keyCode === key.right || keyCode === key.up || keyCode === key.down)) {
 					search();
 				}
 				resizeInput();
 			});
-			$input_element.bind('focus', function (e) {
+			$input_element.on('focus', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				if (!$options_element.is(':empty') || !multiple || plugin.settings.showAllOptionsOnFocus || !plugin.settings.useSearch) {
@@ -270,7 +274,7 @@
 					showOptions();
 				}
 			});
-			$input_element.bind('blur', function (e) {
+			$input_element.on('blur', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				hideOptions();
@@ -333,11 +337,11 @@
 					var $button_remove_element = $(document.createElement('div'));
 					$button_remove_element.data('element', this);
 					$button_remove_element.addClass(plugin.settings.prefix + 'chosen_item_remove');
-					$button_remove_element.bind('mousedown', function (e) {
+					$button_remove_element.on('mousedown', function (e) {
 						e.preventDefault();
 						e.stopPropagation();
 					});
-					$button_remove_element.bind('mouseup', function (e) {
+					$button_remove_element.on('mouseup', function (e) {
 						e.preventDefault();
 						e.stopPropagation();
 						$(this).data('element').selected = false;
@@ -497,34 +501,38 @@
 			$option.append($clear_element);
 
 			// BIND EVENTS
-			$option.bind('mouseover', function (e) {
-				e.stopPropagation();
+			$option.on('mouseover', function (e) {
 				e.preventDefault();
+				e.stopPropagation();
 				selected_index = index;
 				refreshActiveOption();
 			});
-			$option.bind('mousedown', function (e) {
-				e.stopPropagation();
+			$option.on('mousedown', function (e) {
 				e.preventDefault();
+				e.stopPropagation();
 			});
-			$option.bind('click', function (e) {
+			$option.on('mouseup', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				selectOption();
+			});
+			$option.on('click', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
 			});
 			return $option;
 		};
 
 		// SHOW OPTIONS AND DIMMER
 		var showOptions = function () {
-			$box_element.removeClass('options-hidden').addClass('options-visible');
+			$container_element.removeClass('options-hidden').addClass('options-visible');
 			if (plugin.settings.useDimmer) {
 				$('#' + plugin.settings.prefix + 'dimmer').show();
 			}
 			setTimeout(function () {
-				$options_element.css('top', ($box_element.outerHeight() + (multiple ? 0 : $input_element.outerHeight()) -2) + 'px');
+				$options_element.css('top', ($container_element.outerHeight() + (multiple ? 0 : $input_element.outerHeight()) -2) + 'px');
 			}, 1); 
-			if ($box_element.hasClass('single')) {
+			if ($container_element.hasClass('single')) {
 				selected_index = $options_element.find('.' + plugin.settings.prefix + 'option').index($options_element.find('.' + plugin.settings.prefix + 'option.active'));
 			}
 			scrollToActiveOption();
@@ -532,7 +540,7 @@
 
 		// HIDE OPTIONS AND DIMMER
 		var hideOptions = function () {
-			$box_element.removeClass('options-visible').addClass('options-hidden');
+			$container_element.removeClass('options-visible').addClass('options-hidden');
 			if (plugin.settings.useDimmer) {
 				$('#' + plugin.settings.prefix + 'dimmer').hide();
 			}
@@ -561,7 +569,7 @@
 			$source_element.trigger('change');
 			refreshSelectedOptions();
 			$input_element.val('');
-			$box_element.focus();
+			//$container_element.focus();
 			if (!plugin.settings.keepOpen) {
 				hideOptions();
 			}
@@ -571,7 +579,7 @@
 
 		// REMOVE PLUGIN AND REVERT SELECT ELEMENT TO ORIGINAL STATE
 		plugin.destroy = function () {
-			$box_element.remove();
+			$container_element.remove();
 			$.removeData(element, 'selectator');
 			$source_element.show();
 			if ($('.selectator').length === 0) {
