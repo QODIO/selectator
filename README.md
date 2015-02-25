@@ -133,13 +133,13 @@ jQuery methods
 --------------
 Method             | Description
 ------------------ | -----------
-refreshChosenItems | This method is used internally by the plugin, but you can also call it manually, it is used to refresh the plugin. A scenario where this would be useful is if the data in the original select box is changed by some other script.
+refresh            | This method is used to refresh the plugin. A scenario where this would be useful is if the data in the original select box is changed by some other script.
 destroy            | This method is used to remove the instance of the plugin from the select box and restore it to its original state.
 
 
 ###### Method usage
 ```javascript
-$('#selectBox').selectator('refreshChosenItems');
+$('#selectBox').selectator('refresh');
 ```
 or 
 ```javascript
