@@ -116,6 +116,7 @@
 			// input element
 			$input_element = $(document.createElement('input'));
 			$input_element.addClass(plugin.settings.prefix + 'input');
+			$input_element.attr('tabindex', $source_element.attr('tabindex'));
 			if (!plugin.settings.useSearch) {
 				$input_element.attr('readonly', true);
 				$input_element.css({
@@ -140,6 +141,11 @@
 			$options_element.addClass(plugin.settings.prefix + 'options');
 
 			$container_element.append($options_element);
+
+			Scrollator !== undefined && $options_element.scrollator({
+				zIndex: 1001
+			});
+
 
 			//// ================== BIND ELEMENTS EVENTS ================== ////
 			// source element
@@ -170,7 +176,7 @@
 			});
 			$container_element.on('mouseup', function (e) {
 				e.preventDefault();
-				e.stopPropagation();
+				//e.stopPropagation();
 			});
 			$container_element.on('click', function (e) {
 				e.preventDefault();
