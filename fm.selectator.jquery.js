@@ -142,9 +142,11 @@
 
 			$container_element.append($options_element);
 
-			Scrollator !== undefined && $options_element.scrollator({
-				zIndex: 1001
-			});
+			if (typeof Scrollator != 'undefined') {
+				$options_element.scrollator({
+					zIndex: 1001
+				});
+			}
 
 
 			//// ================== BIND ELEMENTS EVENTS ================== ////
