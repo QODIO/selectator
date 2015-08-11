@@ -37,7 +37,7 @@
 	padding-bottom: 5px !important;
 }
 .selectator.single {
-	height: 36px;
+	/*height: 36px;*/
 	padding: 7px 10px !important;
 }
 .selectator:after {
