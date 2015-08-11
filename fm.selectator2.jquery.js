@@ -332,7 +332,8 @@
 		var resizeSearchInput = function () {
 			$textlength_element.text($input_element.val());
 			if (is_multiple) {
-				$input_element.css({ width: ($textlength_element.width() + 20) + 'px' });
+				var width = $textlength_element.width() > ($container_element.width() - 30) ? ($container_element.width() - 30) : ($textlength_element.width() + 30);
+				$input_element.css({ width: width + 'px' });
 			}
 		};
 
