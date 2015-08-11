@@ -296,7 +296,7 @@
 		var resizeInput = function () {
 			$textlength_element.text($input_element.val());
 			if (multiple) {
-				var width = $textlength_element.width() > ($source_element.width() - 30) ? ($source_element.width() - 30) : ($textlength_element.width() + 30);
+				var width = $textlength_element.width() > ($container_element.width() - 30) ? ($container_element.width() - 30) : ($textlength_element.width() + 30);
 				$input_element.css({ width: width + 'px' });
 			}
 		};
