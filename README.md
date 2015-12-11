@@ -17,6 +17,10 @@ Usage
 ```javascript
 $('#selectBox').selectator();
 ```
+If you don't wan't to meddle with scripting, there is an alternative to activate replacement, by using inline markup. 
+```html
+<select multiple class="selectator" data-selectator-keep-open="true">
+```
 
 ###### if you want to change settings:
 ```javascript
