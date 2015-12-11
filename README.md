@@ -77,7 +77,7 @@ Here is a list of all the css classes
 
 Class                         | Description
 ----------------------------- | ------------------------------------------------------------------------------
-selectator                    | This is the new select box. It has some extra classes called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `options-visible` and `options-hidden` which tell if the options list is visible or not.
+`prefix_`element              | This is the new select box. It has some extra classes called `single` and `multiple`, which tell if it is a multiple selection or single selection select box. And also `options-visible` and `options-hidden` which tell if the options list is visible or not.
 `prefix_`chosen_items         | The holder for the chosen items.
 `prefix_`chosen_item          | The holder for the chosen item.
 `prefix_`chosen_item_title    | The title of the chosen item.
@@ -101,7 +101,7 @@ selectator                    | This is the new select box. It has some extra cl
 DOM Structure
 -------------
 * dimmer
-* selectator: *containing the `single`|`multiple` class and the `options-visible`|`options-hidden` class*
+* element: *containing the `single`|`multiple` class and the `options-visible`|`options-hidden` class*
     * textlength
     * chosen_items
         * chosen_item

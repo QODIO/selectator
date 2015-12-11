@@ -88,6 +88,8 @@
 					$(document.body).prepend($dimmer_element);
 				}
 			}
+			// source element
+			$source_element.addClass('selectator');
 			// container element
 			$container_element = $(document.createElement('div'));
 			if ($source_element.attr('id') !== undefined) {
