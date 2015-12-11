@@ -1,18 +1,21 @@
 /**
  * Selectator jQuery Plugin
  * A plugin for select elements
- * version 1.1, Dec 10th, 2013
+ * version 1.1, Dec 11th, 2015
  * by Ingi P. Jacobsen
  */
 
 /* reset */
-.selectator * {
+.selectator_element * {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	text-decoration: none;
 }
-.selectator img {
+.selectator_element img {
 	display: block;
+}
+.selectator_element.focused {
+	box-shadow: 0 0 1px #39f;
 }
 
 /* dimmer */
@@ -25,22 +28,23 @@
 }
 
 /* Main box */
-.selectator {
+.selectator_element {
 	border: 1px solid #d0d1d4;
 	box-sizing: border-box;
 	background-color: #fff;
 	display: inline-block;
 	text-decoration: none;
+	vertical-align: middle;
 }
-.selectator.multiple {
+.selectator_element.multiple {
 	padding-right: 20px !important;
 	padding-bottom: 5px !important;
 }
-.selectator.single {
-	/*height: 36px;*/
+.selectator_element.single {
+	height: 36px;
 	padding: 7px 10px !important;
 }
-.selectator:after {
+.selectator_element:after {
 	position: absolute;
 	cursor: pointer;
 	content: '\25BC';
@@ -208,7 +212,7 @@
 }
 
 /* options holder */
-                           .selectator_options {
+                                    .selectator_options {
 	margin: 0;
 	padding: 0;
 	border: 1px solid #7f9db9;
@@ -225,44 +229,45 @@
 	left: -1px;
 	right: -1px;
 }
-.single                    .selectator_options {
+.single                             .selectator_options {
 	padding-top: 0;
 	border-top: 0;
 }
-       .disable_search     .selectator_options {
+       .disable_search              .selectator_options {
 	border-top: 1px solid #7f9db9;
 }
-.single.disable_search     .selectator_options {
+.single.disable_search              .selectator_options {
 	padding-top: 0;
 }
-.selectator.options-hidden .selectator_options {
+.selectator_element.options-hidden .selectator_options {
 	display: none;
 }
 
 /* option item group header */
-.selectator_group_header {
+.selectator_group {
 	padding: 5px;
 	font-weight: bold;
 }
 
-/* option item group holder */
-.selectator_group {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
 /* option item */
-                  .selectator_option {
-	padding: 5px;
-	cursor: pointer;
-	color: #000;
+.selectator_option {
+padding: 5px;
+cursor: pointer;
+color: #000;
 }
-                  .selectator_option.active {
+.selectator_option:before,
+.selectator_option:after {
+content: "";
+display: table;
+}
+.selectator_option:after {
+	clear: both;
+}
+.selectator_option.active {
 	background-color: #39f;
 	color: #fff;
 }
-.selectator_group .selectator_option {
+.selectator_group_option {
 	padding: 5px 5px 5px 20px;
 }
 /* option item - left */

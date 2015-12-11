@@ -17,6 +17,10 @@ Usage
 ```javascript
 $('#selectBox').selectator();
 ```
+if inline markup
+```html
+<select multiple class="selectator" data-selectator-keep-open="true">
+```
 
 ###### if you want to change settings:
 ```javascript

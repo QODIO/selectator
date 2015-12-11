@@ -41,6 +41,10 @@
 			width: 350px;
 			height: 36px;
 		}		
+		#select7 {
+			width: 350px;
+			height: 36px;
+		}		
 	</style>
 	<script src="jquery-1.11.0.min.js"></script>
 	<script src="fm.selectator.jquery.js"></script>
@@ -269,7 +273,7 @@
 		<br>
 
 
-		<label for="select4">
+		<label for="select6">
 			Multi select with custom content and keep open:
 		</label>
 		<select id="select6" name="select6" multiple>
@@ -295,6 +299,36 @@
 			<option value="14" class="option_fourteen">Fourteen</option>
 		</select>
 		<input value="activate selectator" id="activate_selectator6" type="button">
+		<br>
+		<br>
+
+
+		<label for="select7">
+			Inline markup initialized
+		</label>
+		<pre>&lt;select multiple class=&quot;selectator&quot; data-selectator-keep-open=&quot;true&quot;&gt;</pre>
+		<select id="select7" name="select6" multiple class="selectator" data-selectator-keep-open="true">
+			<optgroup label="Group one" class="group_one">
+				<option value="1" class="option_one" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
+				<option value="2" class="option_two" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
+			</optgroup>
+			<optgroup label="Group two" class="group_two">
+				<option value="3" class="option_three" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
+				<option value="4" class="option_four" selected data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
+				<option value="5" class="option_five" selected data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
+				<option value="6" class="option_six">Six</option>
+			</optgroup>
+			<optgroup label="Group three" class="group_three">
+				<option value="7" class="option_seven">Seven</option>
+			</optgroup>
+			<option value="8" class="option_eight" data-subtitle="Otte">Eight</option>
+			<option value="9" class="option_nine">Nine</option>
+			<option value="10" class="option_ten" selected>Ten</option>
+			<option value="11" class="option_eleven" selected>Eleven</option>
+			<option value="12" class="option_twelve">Twelve</option>
+			<option value="13" class="option_thirteen">Thirteen</option>
+			<option value="14" class="option_fourteen">Fourteen</option>
+		</select>
 		<br>
 		<br>
 
