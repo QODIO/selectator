@@ -158,7 +158,7 @@
 			if (typeof Scrollator !== 'undefined') {
 				$options_element.scrollator({
 					zIndex: 1001,
-					custom_class : 'ease_preventOverlay'
+					customClass : 'ease_preventOverlay'
 				});
 			}
 
