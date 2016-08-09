@@ -1,7 +1,7 @@
 /*
  Selectator jQuery Plugin
  A plugin for select elements
- version 2.2, Dac 11th, 2015
+ version 3.0, Apr 8th, 2016
  by Ingi P. Jacobsen
 
  The MIT License (MIT)
@@ -27,7 +27,8 @@
 */
 
 (function($) {
-	$.selectator = function (element, options) {
+	'use strict';
+	$.selectator = function (_element, _options) {
 		var defaults = {
 			prefix: 'selectator_',
 			height: 'auto',
@@ -36,23 +37,58 @@
 			showAllOptionsOnFocus: false,
 			selectFirstOptionOnSearch: true,
 			keepOpen: false,
-			searchCallback: function(){},
+			submitCallback: function () {},
+			load: null,
+			delay: 0,
+			minSearchLength: 0,
+			valueField: 'value',
+			textField: 'text',
+			searchFields: ['value', 'text'],
+			placeholder: '',
+			render: {
+				selected_item: function (_item, escape) {
+					var html = '';
+					if (typeof _item.left !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'selected_item_left"><img src="' + escape(_item.left) + '"></div>';
+					if (typeof _item.right !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'selected_item_right">' + escape(_item.right) + '</div>';
+					html += '<div class="' + self.options.prefix + 'selected_item_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
+					if (typeof _item.subtitle !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'selected_item_subtitle">' + escape(_item.subtitle) + '</div>';
+					html += '<div class="' + self.options.prefix + 'selected_item_remove">X</div>';
+					return html;
+				},
+				option: function (_item, escape) {
+					var html = '';
+					if (typeof _item.left !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'option_left"><img src="' + escape(_item.left) + '"></div>';
+					if (typeof _item.right !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'option_right">' + escape(_item.right) + '</div>';
+					html += '<div class="' + self.options.prefix + 'option_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
+					if (typeof _item.subtitle !== 'undefined') 
+						html += '<div class="' + self.options.prefix + 'option_subtitle">' + escape(_item.subtitle) + '</div>';
+					return html;
+				}
+			},
 			labels: {
 				search: 'Search...'
 			}
 		};
 
-		var plugin = this;
-		plugin.settings = {};
-		var $source_element = $(element);
-		var $container_element = null;
-		var $chosenitems_element = null;
-		var $input_element = null;
-		var $textlength_element = null;
-		var $options_element = null;
-		var is_single = $source_element.attr('multiple') === undefined;
+		var self = this;
+		self.options = {};
+		self.$source_element = $(_element);
+		self.$container_element = null;
+		self.$selecteditems_element = null;
+		self.$input_element = null;
+		self.$textlength_element = null;
+		self.$options_element = null;
+		self.usefilterResults = true;
+		var is_single = self.$source_element.attr('multiple') === undefined;
 		var is_multiple = !is_single;
+		var using_remote_data = false;
 		var has_visible_options = true;
+		var delayTimer = null;
 		var key = {
 			backspace: 8,
 			tab:       9,
@@ -75,61 +111,75 @@
 		
 		
 		// INITIALIZE PLUGIN
-		plugin.init = function () {
-			plugin.settings = $.extend({}, defaults, options);
+		self.init = function () {
+			self.options = $.extend(true, {}, defaults, _options);
+			$.each(self.$source_element.data(), function (_key, _value) {
+				if (_key.substring(0, 10) == 'selectator') {
+					self.options[_key.substring(10, 11).toLowerCase() + _key.substring(11)] = _value;
+				}
+			});
+			self.options.searchFields = typeof self.options.searchFields === 'string' ? self.options.searchFields.split(' ') : self.options.searchFields;
+			self.$source_element.find('option').each(function () {
+				$(this).data('value', this.value);
+				$(this).data('text', this.text);
+			});
+			using_remote_data = self.options.load !== null;
 
 			//// ================== CREATE ELEMENTS ================== ////
 			// dimmer
-			if (plugin.settings.useDimmer) {
-				if ($('#' + plugin.settings.prefix + 'dimmer').length === 0) {
+			if (self.options.useDimmer) {
+				if ($('#' + self.options.prefix + 'dimmer').length === 0) {
 					var $dimmer_element = $(document.createElement('div'));
-					$dimmer_element.attr('id', plugin.settings.prefix + 'dimmer');
+					$dimmer_element.attr('id', self.options.prefix + 'dimmer');
 					$dimmer_element.hide();
 					$(document.body).prepend($dimmer_element);
 				}
 			}
 			// source element
-			$source_element.addClass('selectator');
+			self.$source_element.addClass('selectator');
+			if (self.$source_element.attr('placeholder')) {
+				self.options.placeholder = self.$source_element.attr('placeholder');
+			}
 			// container element
-			$container_element = $(document.createElement('div'));
-			if ($source_element.attr('id') !== undefined) {
-				$container_element.attr('id', plugin.settings.prefix + $source_element.attr('id'));
+			self.$container_element = $(document.createElement('div'));
+			if (self.$source_element.attr('id') !== undefined) {
+				self.$container_element.attr('id', self.options.prefix + self.$source_element.attr('id'));
 			}
-			$container_element.addClass(plugin.settings.prefix + 'element ' + (is_multiple ? 'multiple ' : 'single ') + 'options-hidden');
-			if (!plugin.settings.useSearch) {
-				$container_element.addClass('disable_search');
+			self.$container_element.addClass(self.options.prefix + 'element ' + (is_multiple ? 'multiple ' : 'single ') + 'options-hidden');
+			if (!self.options.useSearch) {
+				self.$container_element.addClass('disable_search');
 			}
-			$container_element.css({
-				width: $source_element.css('width'),
-				minHeight: $source_element.css('height'),
-				padding: $source_element.css('padding'),
-				'flex-grow': $source_element.css('flex-grow'),
+			self.$container_element.css({
+				width: self.$source_element.css('width'),
+				minHeight: self.$source_element.css('height'),
+				padding: self.$source_element.css('padding'),
+				'flex-grow': self.$source_element.css('flex-grow'),
 				position: 'relative'
 			});
-			if (plugin.settings.height === 'element') {
-				$container_element.css({
-					height: $source_element.outerHeight() + 'px'
+			if (self.options.height === 'element') {
+				self.$container_element.css({
+					height: self.$source_element.outerHeight() + 'px'
 				});
 			}
 			// textlength element
-			$textlength_element = $(document.createElement('span'));
-			$textlength_element.addClass(plugin.settings.prefix + 'textlength');
-			$textlength_element.css({
+			self.$textlength_element = $(document.createElement('span'));
+			self.$textlength_element.addClass(self.options.prefix + 'textlength');
+			self.$textlength_element.css({
 				position: 'absolute',
 				visibility: 'hidden'
 			});
-			$container_element.append($textlength_element);
-			// chosen items element
-			$chosenitems_element = $(document.createElement('div'));
-			$chosenitems_element.addClass(plugin.settings.prefix + 'chosen_items');
-			$container_element.append($chosenitems_element);
+			self.$container_element.append(self.$textlength_element);
+			// selected items element
+			self.$selecteditems_element = $(document.createElement('div'));
+			self.$selecteditems_element.addClass(self.options.prefix + 'selected_items');
+			self.$container_element.append(self.$selecteditems_element);
 			// input element
-			$input_element = $(document.createElement('input'));
-			$input_element.addClass(plugin.settings.prefix + 'input');
-			$input_element.attr('tabindex', $source_element.attr('tabindex'));
-			if (!plugin.settings.useSearch) {
-				$input_element.attr('readonly', true);
-				$input_element.css({
+			self.$input_element = $(document.createElement('input'));
+			self.$input_element.addClass(self.options.prefix + 'input');
+			self.$input_element.attr('tabindex', self.$source_element.attr('tabindex'));
+			if (!self.options.useSearch) {
+				self.$input_element.attr('readonly', true);
+				self.$input_element.css({
 					'width': '0px',
 					'height': '0px',
 					'overflow': 'hidden',
@@ -139,24 +189,27 @@
 				});
 			} else {
 				if (is_single) {
-					$input_element.attr('placeholder', plugin.settings.labels.search);
+					self.$input_element.attr('placeholder', self.options.labels.search);
 				} else {
-					$input_element.width(20);
+					if (self.options.placeholder !='') {
+						self.$input_element.attr('placeholder', self.options.placeholder);
+					}
+					self.$input_element.width(20);
 				}
 			}
-			$input_element.attr('autocomplete', 'false');
-			$container_element.append($input_element);
+			self.$input_element.attr('autocomplete', 'false');
+			self.$container_element.append(self.$input_element);
 			// options element
-			$options_element = $(document.createElement('ul'));
-			$options_element.addClass(plugin.settings.prefix + 'options');
+			self.$options_element = $(document.createElement('ul'));
+			self.$options_element.addClass(self.options.prefix + 'options');
 
-			$container_element.append($options_element);
-			$source_element.after($container_element);
-			$source_element.hide();
+			self.$container_element.append(self.$options_element);
+			self.$source_element.after(self.$container_element);
+			self.$source_element.hide();
 
 			// Add scrollator if found
 			if (typeof Scrollator !== 'undefined') {
-				$options_element.scrollator({
+				self.$options_element.scrollator({
 					zIndex: 1001,
 					customClass : 'ease_preventOverlay'
 				});
@@ -164,101 +217,99 @@
 
 
 			//// ================== BIND ELEMENTS EVENTS ================== ////
+
 			// source element
-			$source_element.change(function () {
-				regenerateChosenItems();
+			self.$source_element.change(function () {
+				renderSelectedItems();
 			});
+
 			// container element
-			$container_element.on('focus', function (e) {
-				$input_element.focus();
-				$input_element.trigger('focus');
+			self.$container_element.on('focus', function () {
+				self.$input_element.focus();
+				self.$input_element.trigger('focus');
 			});
-			$container_element.on('mousedown', function (e) {
-				e.preventDefault();
-				$input_element.focus();
-				$input_element.trigger('focus');
+			self.$container_element.on('mousedown', function (_e) {
+				_e.preventDefault();
+				self.$input_element.focus();
+				self.$input_element.trigger('focus');
 				// put text caret to end of search field
-				if ($input_element[0].setSelectionRange) {
-					$input_element[0].setSelectionRange($input_element.val().length, $input_element.val().length);
-				} else if ($input_element[0].createTextRange) {
-					var range = $input_element[0].createTextRange();
+				if (self.$input_element[0].setSelectionRange) {
+					self.$input_element[0].setSelectionRange(self.$input_element.val().length, self.$input_element.val().length);
+				} else if (self.$input_element[0].createTextRange) {
+					var range = self.$input_element[0].createTextRange();
 					range.collapse(true);
-					range.moveEnd('character', $input_element.val().length);
-					range.moveStart('character', $input_element.val().length);
+					range.moveEnd('character', self.$input_element.val().length);
+					range.moveStart('character', self.$input_element.val().length);
 					range.select();
 				}
 			});
-			$container_element.on('mouseup', function (e) {
+			self.$container_element.on('click', function () {
+				self.$input_element.focus();
+				self.$input_element.trigger('focus');
 			});
-			$container_element.on('click', function (e) {
-				$input_element.focus();
-				$input_element.trigger('focus');
+			self.$container_element.on('dblclick', function () {
+				self.$input_element.select();
+				self.$input_element.trigger('focus');
 			});
-			$container_element.on('dblclick', function (e) {
-				$input_element.select();
-				$input_element.trigger('focus');
-			});
+
 			// input element
-			$input_element.on('click', function (e) {
-			});
-			$input_element.on('dblclick', function (e) {
-			});
-			$input_element.on('keydown', function (e) {
-				var keyCode = e.keyCode || e.which;
+			self.$input_element.on('keydown', function (_e) {
+				var keyCode = _e.keyCode || _e.which;
 				var $active = null;
 				var $newActive = null;
 				switch (keyCode) {
 					case key.up:
-						e.preventDefault();
+						_e.preventDefault();
 						showDropdown();
-						$active = $options_element.find('.active');
+						$active = self.$options_element.find('.active');
 						if ($active.length !== 0) {
-							$newActive = $active.prevUntil('.' + plugin.settings.prefix + 'option:visible').add($active).first().prev('.' + plugin.settings.prefix + 'option:visible');
+							$newActive = $active.prevUntil('.' + self.options.prefix + 'option:visible').add($active).first().prev('.' + self.options.prefix + 'option:visible');
 							$active.removeClass('active');
 							$newActive.addClass('active');
 						} else {
-							$options_element.find('.' + plugin.settings.prefix + 'option').filter(':visible').last().addClass('active');
+							self.$options_element.find('.' + self.options.prefix + 'option').filter(':visible').last().addClass('active');
 						}
 						scrollToActiveOption();
 						break;
 					case key.down:
-						e.preventDefault();
+						_e.preventDefault();
 						showDropdown();
-						$active = $options_element.find('.active');
+						$active = self.$options_element.find('.active');
 						if ($active.length !== 0) {
-							$newActive = $active.nextUntil('.' + plugin.settings.prefix + 'option:visible').add($active).last().next('.' + plugin.settings.prefix + 'option:visible');
+							$newActive = $active.nextUntil('.' + self.options.prefix + 'option:visible').add($active).last().next('.' + self.options.prefix + 'option:visible');
 							$active.removeClass('active');
 							$newActive.addClass('active');
 						} else {
-							$options_element.find('.' + plugin.settings.prefix + 'option').filter(':visible').first().addClass('active');
+							self.$options_element.find('.' + self.options.prefix + 'option').filter(':visible').first().addClass('active');
 						}
 						scrollToActiveOption();
 						break;
 					case key.escape:
-						e.preventDefault();
+						_e.preventDefault();
 						break;
 					case key.enter:
-						e.preventDefault();
-						$active = $options_element.find('.active');
+						_e.preventDefault();
+						$active = self.$options_element.find('.active');
 						if ($active.length !== 0) {
 							selectOption();
 						} else {
-							if ($input_element.val() !== '') {
-								plugin.settings.searchCallback($input_element.val());
+							if (self.$input_element.val() !== '') {
+								self.options.submitCallback(self.$input_element.val());
 							}
 						}
 						resizeSearchInput();
 						break;
 					case key.backspace:
-						if (plugin.settings.useSearch) {
-							if ($input_element.val() === '' && is_multiple) {
-								$source_element.find('option:selected').last()[0].selected = false;
-								$source_element.trigger('change');
-								regenerateChosenItems();
+						if (self.options.useSearch) {
+							if (self.$input_element.val() === '' && is_multiple && self.$source_element.find('option:selected').length) {
+								self.$source_element.find('option:selected').last()[0].removeAttribute('selected');
+								self.$source_element.find('option:selected').last()[0].selected = false;
+								self.$source_element.trigger('change');
+								renderSelectedItems();
 							}
 							resizeSearchInput();
 						} else {
-							e.preventDefault();
+							_e.preventDefault();
 						}
 						break;
 					default:
@@ -266,16 +317,16 @@
 						break;
 				}
 			});
-			$input_element.on('keyup', function (e) {
-				e.preventDefault();
-				e.stopPropagation();
-				var keyCode = e.which;
+			self.$input_element.on('keyup', function (_e) {
+				_e.preventDefault();
+				_e.stopPropagation();
+				var keyCode = _e.which;
 				switch (keyCode) {
 					case key.escape:
 						hideDropdown();
 						break;
 					case key.enter:
-						if (!plugin.settings.keepOpen) {
+						if (!self.options.keepOpen) {
 							hideDropdown();
 						}
 						break;
@@ -288,120 +339,131 @@
 						// Prevent any action
 						break;
 					default:
-						search();
+						load();
 						break;
 				}
-				if ($container_element.hasClass('options-hidden') && (keyCode === key.left || keyCode === key.right || keyCode === key.up || keyCode === key.down)) {
+				if (self.$container_element.hasClass('options-hidden') && (keyCode === key.left || keyCode === key.right || keyCode === key.up || keyCode === key.down)) {
 					showDropdown();
 				}
 				resizeSearchInput();
 			});
-			$input_element.on('focus', function (e) {
-				$container_element.addClass('focused');
-				if (is_single || plugin.settings.showAllOptionsOnFocus || !plugin.settings.useSearch) {
+			self.$input_element.on('focus', function () {
+				self.$container_element.addClass('focused');
+				if (is_single || self.options.showAllOptionsOnFocus || !self.options.useSearch) {
 					showDropdown();
 				}
 			});
-			$input_element.on('blur', function (e) {
-				$container_element.removeClass('focused');
+			self.$input_element.on('blur', function () {
+				self.$container_element.removeClass('focused');
 				hideDropdown();
 			});
-			
 
+			// bind selected item events
+			self.$container_element.on('mouseup', '.' + self.options.prefix + 'selected_item_remove', function () {
+				var source_item_element = $(this).closest('.' + self.options.prefix + 'selected_item').data('source_item_element');
+				source_item_element.removeAttribute('selected');
+				source_item_element.selected = false;
+				if (is_single && self.$source_element.find('[value=""]').length) {
+					self.$source_element.find('[value=""]')[0].selected = true;
+					self.$source_element.find('[value=""]')[0].removeAttribute('selected');
+				}
+				self.$source_element.trigger('change');
+				filterResults(self.usefilterResults);
+				renderOptions();
+				renderSelectedItems();
+			});
+			
 			// bind option events
-			$container_element.delegate('.' + plugin.settings.prefix + 'option', 'mouseover', function (e) {
-				var $active = $options_element.find('.active');
+			self.$container_element.on('mouseover', '.' + self.options.prefix + 'option', function () {
+				var $active = self.$options_element.find('.active');
 				$active.removeClass('active');
 				var $this = $(this);
 				$this.addClass('active');
 			});
-			$container_element.delegate('.' + plugin.settings.prefix + 'option', 'mousedown', function (e) {
-				e.preventDefault();
-				e.stopPropagation();
+			self.$container_element.on('mousedown', '.' + self.options.prefix + 'option', function (_e) {
+				_e.preventDefault();
+				_e.stopPropagation();
 			});
-			$container_element.delegate('.' + plugin.settings.prefix + 'option', 'mouseup', function (e) {
+			self.$container_element.on('mouseup', '.' + self.options.prefix + 'option', function () {
 				selectOption();
 			});
-			$container_element.delegate('.' + plugin.settings.prefix + 'option', 'click', function (e) {
-				e.stopPropagation();
+			self.$container_element.on('click', '.' + self.options.prefix + 'option', function (_e) {
+				_e.stopPropagation();
 			});
 
-			regenerateOptions();
-			regenerateChosenItems();
+			// Make elements accesible from options
+			self.options.$source_element = self.$source_element;
+			self.options.$container_element = self.$container_element;
+			self.options.$selecteditems_element = self.$selecteditems_element;
+			self.options.$input_element = self.$input_element;
+			self.options.$textlength_element = self.$textlength_element;
+			self.options.$options_element = self.$options_element;
+
+			// Render
+			renderOptions();
+			renderSelectedItems();
+			resizeSearchInput();
 		};
 
 
 		// RESIZE INPUT
 		var resizeSearchInput = function () {
-			$textlength_element.text($input_element.val());
 			if (is_multiple) {
-				var width = $textlength_element.width() > ($container_element.width() - 30) ? ($container_element.width() - 30) : ($textlength_element.width() + 30);
-				$input_element.css({ width: width + 'px' });
+				self.$textlength_element.text(self.$input_element.val() === '' && self.options.placeholder !== '' ? self.options.placeholder : self.$input_element.val());
+				var width = self.$textlength_element.width() > (self.$container_element.width() - 30) ? (self.$container_element.width() - 30) : (self.$textlength_element.width() + 30);
+				self.$input_element.css({ width: width + 'px' });
 			}
 		};
 
 
-		// REGENERATE CHOSEN ITEMS
-		var regenerateChosenItems = function () {
-			$chosenitems_element.empty();
-			$source_element.find('option').each(function () {
+		// RENDER SELECTED ITEMS
+		var renderSelectedItems = function () {
+			self.$selecteditems_element.empty();
+			self.$source_element.find('option').each(function () {
 				var $option = $(this);
 				if (this.selected) {
 					var $item_element = $(document.createElement('div'));
-					$item_element.addClass(plugin.settings.prefix + 'chosen_item');
-					$item_element.addClass(plugin.settings.prefix + 'value_' + $option.val().replace(/\W/g, ''));
-
-					// class
+					$item_element.data('source_item_element', this);
+					$item_element.addClass(self.options.prefix + 'selected_item');
+					$item_element.addClass(self.options.prefix + 'value_' + $option.val().replace(/\W/g, ''));
 					if ($option.attr('class') !== undefined) {
 						$item_element.addClass($option.attr('class'));
 					}
-					// left
-					if ($option.data('left') !== undefined) {
-						var $left_element = $(document.createElement('div'));
-						$left_element.addClass(plugin.settings.prefix + 'chosen_item_left').html($option.attr('data-left'));
-						$item_element.append($left_element);
-					}
-					// right
-					if ($option.data('right') !== undefined) {
-						var $right_element = $(document.createElement('div'));
-						$right_element.addClass(plugin.settings.prefix + 'chosen_item_right').html($option.attr('data-right'));
-						$item_element.append($right_element);
-					}
-					// title
-					var $title_element = $(document.createElement('div'));
-					$title_element.addClass(plugin.settings.prefix + 'chosen_item_title').html($option.html());
-					$item_element.append($title_element);
-					// subtitle
-					if ($option.data('subtitle') !== undefined) {
-						var $subtitle_element = $(document.createElement('div'));
-						$subtitle_element.addClass(plugin.settings.prefix + 'chosen_item_subtitle').html($option.attr('data-subtitle'));
-						$item_element.append($subtitle_element);
-					}
-					// remove button
-					var $button_remove_element = $(document.createElement('div'));
-					$button_remove_element.data('source_option_element', this);
-					$button_remove_element.addClass(plugin.settings.prefix + 'chosen_item_remove');
-					$button_remove_element.on('mousedown', function (e) {
+
+					// fetch data
+					var data = {
+						value: this.value,
+						text: this.text
+					};
+					$.each(this.attributes, function() {
+						if(this.specified) {
+							data[this.name.replace('data-', '')] = this.value;
+						}
 					});
-					$button_remove_element.on('mouseup', function (e) {
-						$(this).data('source_option_element').selected = false;
-						$source_element.trigger('change');
-						search();
-						regenerateChosenItems();
-					});
-					$button_remove_element.html('X');
-					$item_element.append($button_remove_element);
-					$chosenitems_element.append($item_element);
+					$.extend(data, $(this).data('item_data'));
+					$item_element.append(self.options.render.selected_item(data, escape));
+					if (is_single && (data[self.options.valueField] == '' || typeof data[self.options.valueField] === 'undefined' || self.$source_element.find('[value=""]').length === 0)) {
+						$item_element.find('.' + self.options.prefix + 'selected_item_remove').remove();
+					}
+					self.$selecteditems_element.append($item_element);
 				}
 			});
+			if (is_single) {
+				if (self.options.placeholder != '' && (self.$source_element.val() === '' || self.$source_element.val() === null)) {
+					self.$selecteditems_element.empty();
+					self.$selecteditems_element.append('<div class="' + self.options.prefix + 'placeholder">' + self.options.placeholder + '</div>');
+				} else {
+					self.$selecteditems_element.find('.' + self.options.prefix + 'placeholder').remove();
+				}
+			}
 		};
 
 
-		// REGENERATE OPTIONS
-		var regenerateOptions = function () {
-			$options_element.empty();
+		// RENDER OPTIONS
+		var renderOptions = function () {
+			self.$options_element.empty();
 			var optionsArray = [];
-			$source_element.children().each(function () {
+			self.$source_element.children().each(function () {
 				if ($(this).prop('tagName').toLowerCase() === 'optgroup') {
 					var $group = $(this);
 					if ($group.children('option').length !== 0) {
@@ -432,36 +494,36 @@
 			$(optionsArray).each(function () {
 				if (this.type === 'group') {
 					var $group_element = $(document.createElement('li'));
-					$group_element.addClass(plugin.settings.prefix + 'group');
+					$group_element.addClass(self.options.prefix + 'group');
 					if ($(this.element).attr('class') !== undefined) {
 						$group_element.addClass($(this.element).attr('class'));
 					}
 					$group_element.html($(this.element).attr('label'));
-					$options_element.append($group_element);
+					self.$options_element.append($group_element);
 
 					$(this.options).each(function () {
 						var option = createOption.call(this.element, true);
-						$options_element.append(option);
+						self.$options_element.append(option);
 					});
 
 				} else {
 					var option = createOption.call(this.element, false);
-					$options_element.append(option);
+					self.$options_element.append(option);
 				}
 			});
-			search();
+			filterResults(self.usefilterResults);
 		};
 		
 
 		// CREATE RESULT OPTION
-		var createOption = function (isGroupOption) {
+		var createOption = function (_isGroupOption) {
 			// holder li
 			var $option = $(document.createElement('li'));
 			$option.data('source_option_element', this);
-			$option.addClass(plugin.settings.prefix + 'option');
-			$option.addClass(plugin.settings.prefix + 'value_' + $(this).val().replace(/\W/g, ''));
-			if (isGroupOption) {
-				$option.addClass(plugin.settings.prefix + 'group_option');
+			$option.addClass(self.options.prefix + 'option');
+			$option.addClass(self.options.prefix + 'value_' + $(this).val().replace(/\W/g, ''));
+			if (_isGroupOption) {
+				$option.addClass(self.options.prefix + 'group_option');
 			}
 			if (this.selected) {
 				$option.addClass('active');
@@ -470,60 +532,123 @@
 			if ($(this).attr('class') !== undefined) {
 				$option.addClass($(this).attr('class'));
 			}
-			// left
-			if ($(this).data('left') !== undefined) {
-				var $left_element = $(document.createElement('div'));
-				$left_element.addClass(plugin.settings.prefix + 'option_left').html($(this).attr('data-left'));
-				$option.append($left_element);
+			// fetch data
+			var data = {
+				value: this.value,
+				text : this.text
+			};
+			$.each(this.attributes, function() {
+				if(this.specified) {
+					data[this.name.replace('data-', '')] = this.value;
+				}
+			});
+			$.extend(data, $(this).data('item_data'));
+			if (is_multiple && this.selected) {
+				$option.hide();
 			}
-			// right
-			if ($(this).data('right') !== undefined) {
-				var $right_element = $(document.createElement('div'));
-				$right_element.addClass(plugin.settings.prefix + 'option_right').html($(this).attr('data-right'));
-				$option.append($right_element);
-			}
-			// title
-			var $title_element = $(document.createElement('div'));
-			$title_element.addClass(plugin.settings.prefix + 'option_title').html($(this).html());
-			$option.append($title_element);
-			// subtitle
-			if ($(this).data('subtitle') !== undefined) {
-				var $subtitle_element = $(document.createElement('div'));
-				$subtitle_element.addClass(plugin.settings.prefix + 'option_subtitle').html($(this).attr('data-subtitle'));
-				$option.append($subtitle_element);
-			}
-
+			
+			$option.append(self.options.render.option(data, escape));
+			
 			return $option;
 		};
 		
 		
-		// SEARCH
-		var search = function () {
-			// bool true if search field is considered empty
-			var searchIsEmpty = $input_element.val().replace(/\s/g, '') === '';
+		// LOAD SEARCH RESULTS (IF NEEDED)
+		var load = function () {
+			clearTimeout(delayTimer);
+			delayTimer = setTimeout(function () {
+				self.$container_element.addClass('loading');
+				if (using_remote_data) {
+					self.options.load(self.$input_element.val(), function (results, usefilterResults) {
+						self.usefilterResults = typeof usefilterResults !== 'undefined' ? usefilterResults : false;
+						self.$source_element.children('option').not(':selected').not('[value=""]').remove();
+						if (typeof results !== 'undefined') {
+							var selectedOptions = [];
+							$.each(self.$source_element.children('option:selected'), function (_key, _option) {
+								selectedOptions.push(_option.value);
+							});
+							if (is_single && self.$source_element.find('[value=""]').length === 0) {
+								self.$source_element.prepend($('<option value="">&nbsp;</option>'));
+							}
+							if (self.$input_element.val().replace(/\s/g, '').length >= self.options.minSearchLength) {
+								for (var i = 0; i < results.length; i++) {
+									var result = results[i];
+									if ($.inArray(result[self.options.valueField] + "", selectedOptions) === -1) {
+										var $option = $('<option value="' + result[self.options.valueField] + '">' + result[self.options.textField] + '</option>');
+										self.$source_element.append($option);
+										$option.data('item_data', result);
+									}
+								}
+							}
+						}
+						renderOptions();
+						self.$container_element.removeClass('loading');
+						filterResults(self.usefilterResults);
+					});
+				} else {
+					self.$container_element.removeClass('loading');
+					filterResults(self.usefilterResults);
+				}
+			}, self.options.delay);
+		};
+
+		
+		// FILTER SEARCH RESULTS
+		var filterResults = function (usefilterResults) {
+			usefilterResults = typeof usefilterResults !== 'undefined' ? usefilterResults : false;
+			// bool true if search field is below required length
+			var searchIsBelowRequired = self.$input_element.val().replace(/\s/g, '').length < self.options.minSearchLength;
 			// bool true if any options are visible
 			has_visible_options = false;
 			// get sanitized search text
-			var searchFor = $input_element.val().toLowerCase();
+			var searchFor = self.$input_element.val().toLowerCase();
 			// iterate through the options
-			$options_element.find('.' + plugin.settings.prefix + 'option').each(function () {
+			self.$options_element.find('.' + self.options.prefix + 'option').each(function () {
 				var $this = $(this);
 				var source_option_element = $this.data('source_option_element');
-				// show if:
-				// (item is not selected  or  if single select)
-				// and 
-				//     use search
-				//         and search is empty  or  text matches the input box
-				//     or not using search
+				var $source_option_element = $(source_option_element);
+
+				//  SHOW IF:
+				// --------------------------------------------
+				//  NOT using filter results
+				//      AND option is NOT selected
+				//  OR
+				//      using filter results
+				//      AND
+				//          option is NOT selected
+				//          OR single select
+				//      AND
+				//          use search
+				//          AND
+				//              searchtext is below required
+				//              OR option text matches searchtext
+				//              OR option value is empty
+				//          OR NOT using search
+				var match_found = false;
+				$.each(self.options.searchFields, function (key, value) {
+					if (typeof $source_option_element.data(value) !== 'undefined' && $source_option_element.data(value).toString().toLowerCase().indexOf(searchFor) !== -1) {
+						match_found = true;
+						return false;
+					}
+				});
 				if (
-					(!source_option_element.selected || is_single) 
-					&& (
-						plugin.settings.useSearch
+					(!usefilterResults 
+						&& !source_option_element.selected
+					)
+					|| (usefilterResults
 						&& (
-							searchIsEmpty 
-							|| $(source_option_element).html().toLowerCase().indexOf(searchFor) !== -1
+							!source_option_element.selected 
+							|| is_single
+						) 
+						&& (
+							self.options.useSearch
+							&& (
+								searchIsBelowRequired
+								|| match_found
+								|| $source_option_element.val() === ''
+							)
+							|| !self.options.useSearch
 						)
-						|| !plugin.settings.useSearch
 					)
 				) {
 					$this.show();
@@ -533,10 +658,10 @@
 				}
 			});
 			// iterate through the groups
-			$options_element.find('.' + plugin.settings.prefix + 'group').each(function () {
+			self.$options_element.find('.' + self.options.prefix + 'group').each(function () {
 				var $this = $(this);
 				var has_visible_options = false;
-				$this.nextUntil('.' + plugin.settings.prefix + 'group').each(function () {
+				$this.nextUntil('.' + self.options.prefix + 'group').each(function () {
 					var $option = $(this);
 					if ($option.css('display') != 'none') {
 						has_visible_options = true;
@@ -552,9 +677,9 @@
 			});
 			showDropdown();
 			if (is_multiple) {
-				$options_element.find('.active').removeClass('active');
-				if (!searchIsEmpty) {
-					$options_element.find('.' + plugin.settings.prefix + 'option').filter(':visible').first().addClass('active');
+				self.$options_element.find('.active').removeClass('active');
+				if (!searchIsBelowRequired) {
+					self.$options_element.find('.' + self.options.prefix + 'option').filter(':visible').first().addClass('active');
 				}
 			}
 		};
@@ -562,15 +687,15 @@
 
 		// SHOW OPTIONS AND DIMMER
 		var showDropdown = function () {
-			if ($input_element.is(':focus') && (has_visible_options || is_single )) {
-				$container_element.removeClass('options-hidden').addClass('options-visible');
-				if (plugin.settings.useDimmer) {
-					$('#' + plugin.settings.prefix + 'dimmer').show();
+			if (self.$input_element.is(':focus') && (has_visible_options || is_single ) && !(self.$options_element.is(':empty') && !self.options.useSearch)) {
+				self.$container_element.removeClass('options-hidden').addClass('options-visible');
+				if (self.options.useDimmer) {
+					$('#' + self.options.prefix + 'dimmer').show();
 				}
 				setTimeout(function () {
-					$options_element.css('top', ($container_element.outerHeight() + (is_multiple ? 0 : $input_element.outerHeight()) - 1) + 'px');
+					self.$options_element.css('top', (self.$container_element.outerHeight() + (is_multiple ? 0 : self.$input_element.outerHeight()) - 1) + 'px');
 					if (typeof Scrollator !== 'undefined') {
-						$options_element.data('scrollator').show();
+						self.$options_element.data('scrollator').show();
 					}
 				}, 1);
 				scrollToActiveOption();
@@ -582,21 +707,21 @@
 
 		// HIDE OPTIONS AND DIMMER
 		var hideDropdown = function () {
-			$container_element.removeClass('options-visible').addClass('options-hidden');
+			self.$container_element.removeClass('options-visible').addClass('options-hidden');
 			if (typeof Scrollator !== 'undefined') {
-				$options_element.data('scrollator').hide();
+				self.$options_element.data('scrollator').hide();
 			}
-			if (plugin.settings.useDimmer) {
-				$('#' + plugin.settings.prefix + 'dimmer').hide();
+			if (self.options.useDimmer) {
+				$('#' + self.options.prefix + 'dimmer').hide();
 			}
 		};
 
 
 		// SCROLL TO ACTIVE OPTION IN OPTIONS LIST
 		var scrollToActiveOption = function () {
-			var $active_element = $options_element.find('.' + plugin.settings.prefix + 'option.active');
+			var $active_element = self.$options_element.find('.' + self.options.prefix + 'option.active');
 			if ($active_element.length > 0) {
-				$options_element.scrollTop($options_element.scrollTop() + $active_element.position().top - $options_element.height()/2 + $active_element.height()/2);
+				self.$options_element.scrollTop(self.$options_element.scrollTop() + $active_element.position().top - self.$options_element.height()/2 + $active_element.height()/2);
 			}
 		};
 
@@ -604,64 +729,86 @@
 		// SELECT ACTIVE OPTION
 		var selectOption = function () {
 			// select option
-			var $active = $options_element.find('.active');
+			var $active = self.$options_element.find('.active');
 			$active.data('source_option_element').selected = true;
-			$source_element.trigger('change');
-			$input_element.val('');
-			search();
-			regenerateChosenItems();
-			if (!plugin.settings.keepOpen) {
+			$active.data('source_option_element').removeAttribute('selected');
+			self.$source_element.trigger('change');
+			if (!self.options.keepOpen) {
+				self.$input_element.val('');
+			}
+			filterResults(self.usefilterResults);
+			renderSelectedItems();
+			resizeSearchInput();
+			if (using_remote_data && !self.options.keepOpen) {
+				self.$source_element.children('option').not(':selected').not('[value=""]').remove();
+				renderOptions();
+				hideDropdown();
+			}
+			if (!self.options.keepOpen) {
 				hideDropdown();
 			}
 		};
 
+		
+		// ESCAPE FUNCTION
+		var escape = function(str) {
+			return (str + '')
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;');
+		};
+
 
 		// REFRESH PLUGIN
-		plugin.refresh = function () {
-			regenerateChosenItems();
+		self.refresh = function () {
+			renderSelectedItems();
 		};
 
 
 		// REMOVE PLUGIN AND REVERT SELECT ELEMENT TO ORIGINAL STATE
-		plugin.destroy = function () {
-			$container_element.remove();
-			$.removeData(element, 'selectator');
-			$source_element.show();
-			if ($('.' + plugin.settings.prefix + 'element').length === 0) {
-				$('#' + plugin.settings.prefix + 'dimmer').remove();
+		self.destroy = function () {
+			self.$container_element.remove();
+			$.removeData(_element, 'selectator');
+			self.$source_element.show();
+			if ($('.' + self.options.prefix + 'element').length === 0) {
+				$('#' + self.options.prefix + 'dimmer').remove();
 			}
 		};
 
 		
 		// Initialize plugin
-		plugin.init();
+		self.init();
 	};
 	
-	$.fn.selectator = function(options) {
-		options = options !== undefined ? options : {};
+	// Initializer
+	$.fn.selectator = function(_options) {
+		var options = _options !== undefined ? _options : {};
 		return this.each(function () {
+			var $this = $(this);
 			if (typeof(options) === 'object') {
-				if (undefined === $(this).data('selectator')) {
-					var plugin = new $.selectator(this, options);
-					$(this).data('selectator', plugin);
+				if ($this.data('selectator') === undefined) {
+					var self = new $.selectator(this, options);
+					$this.data('selectator', self);
 				}
-			} else if ($(this).data('selectator')[options]) {
-				$(this).data('selectator')[options].apply(this, Array.prototype.slice.call(arguments, 1));
+			} else if ($this.data('selectator')[options]) {
+				$this.data('selectator')[options].apply(this, Array.prototype.slice.call(arguments, 1));
 			} else {
 				$.error('Method ' + options + ' does not exist in $.selectator');
 			}
 		});
 	};
-
 }(jQuery));
 
+// Markup initializer
 $(function () {
+	'use strict';
 	$('.selectator').each(function () {
 		var $this = $(this);
 		var options = {};
-		$.each($this.data(), function (key, value) {
-			if (key.substring(0, 10) == 'selectator') {
-				options[key.substring(10, 11).toLowerCase() + key.substring(11)] = value;
+		$.each($this.data(), function (_key, _value) {
+			if (_key.substring(0, 10) == 'selectator') {
+				options[_key.substring(10, 11).toLowerCase() + _key.substring(11)] = _value;
 			}
 		});
 		$this.selectator(options);
