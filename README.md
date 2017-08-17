@@ -47,6 +47,32 @@ $('#selectBox').selectator({
                                        //   (not needed when custom rendering functions are defined)
     textField: 'text',                 // The name of the property to use as the "text"
                                        //   (not needed when custom rendering functions are defined)
+    searchFields: ['value', 'test'],   // The fields to search in
+    render: {
+        selected_item: function (_item, escape) {
+            var html = '';
+            if (typeof _item.left !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'selected_item_left"><img src="' + escape(_item.left) + '"></div>';
+            if (typeof _item.right !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'selected_item_right">' + escape(_item.right) + '</div>';
+            html += '<div class="' + self.options.prefix + 'selected_item_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
+            if (typeof _item.subtitle !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'selected_item_subtitle">' + escape(_item.subtitle) + '</div>';
+            html += '<div class="' + self.options.prefix + 'selected_item_remove">X</div>';
+            return html;
+        },
+        option: function (_item, escape) {
+            var html = '';
+            if (typeof _item.left !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'option_left"><img src="' + escape(_item.left) + '"></div>';
+            if (typeof _item.right !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'option_right">' + escape(_item.right) + '</div>';
+            html += '<div class="' + self.options.prefix + 'option_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
+            if (typeof _item.subtitle !== 'undefined') 
+                html += '<div class="' + self.options.prefix + 'option_subtitle">' + escape(_item.subtitle) + '</div>';
+            return html;
+        }
+    },
     labels: {
         search: 'Search...'            // Placeholder text in search box in single select box
     }
