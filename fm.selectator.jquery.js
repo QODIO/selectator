@@ -302,8 +302,9 @@
 					case key.backspace:
 						if (self.options.useSearch) {
 							if (self.$input_element.val() === '' && is_multiple && self.$source_element.find('option:selected').length) {
-								self.$source_element.find('option:selected').last()[0].removeAttribute('selected');
-								self.$source_element.find('option:selected').last()[0].selected = false;
+								var lastSelectedItem = self.$source_element.find('option:selected').last()[0];
+								lastSelectedItem.removeAttribute('selected');
+								lastSelectedItem.selected = false;
 								self.$source_element.trigger('change');
 								renderSelectedItems();
 							}
@@ -364,8 +365,9 @@
 				source_item_element.removeAttribute('selected');
 				source_item_element.selected = false;
 				if (is_single && self.$source_element.find('[value=""]').length) {
-					self.$source_element.find('[value=""]')[0].selected = true;
-					self.$source_element.find('[value=""]')[0].removeAttribute('selected');
+					var noValueOption = self.$source_element.find('[value=""]')[0];
+					noValueOption.setAttribute('selected', '');
+					noValueOption.selected = true;
 				}
 				self.$source_element.trigger('change');
 				filterResults(self.usefilterResults);
@@ -730,8 +732,8 @@
 		var selectOption = function () {
 			// select option
 			var $active = self.$options_element.find('.active');
+			$active.data('source_option_element').setAttribute('selected', '');
 			$active.data('source_option_element').selected = true;
-			$active.data('source_option_element').removeAttribute('selected');
 			self.$source_element.trigger('change');
 			if (!self.options.keepOpen) {
 				self.$input_element.val('');
