@@ -1,7 +1,7 @@
 Selectator
 ==========
 Selectator is a jQuery-based replacement for select boxes. It supports searching, custom renderers, remote data (ajax), search delay, minimum search length, selection remove/clear and placeholders. It affects the original select box directly, which is used as the data container.
-[You can see a demo here](http://opensource.faroemedia.com/selectator).
+[You can see a demo here](http://opensource.qodio.com/selectator).
 
 
 Usage
