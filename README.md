@@ -207,7 +207,7 @@ Copyright and license
 ---------------------
 The MIT License (MIT)
 
-Copyright (c) 2013 Faroe Media
+Copyright (c) 2013 Qodio
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
