@@ -2,337 +2,728 @@
 <html>
 <head>
 	<title>Selectator Plugin</title>
-	<link rel="stylesheet" href="fm.selectator.jquery.css"/>
+	<link href="fm.selectator.jquery.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,400,300" rel="stylesheet" type="text/css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.min.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.ie.min.css" rel="stylesheet">
+	<![endif]-->
 	<style>
 		body {
-			font-family: sans-serif;
+			font-family: 'Open Sans', sans-serif;
 			margin: 0;
+			background-color: #eee;
+		}
+		#wrapper {
 			padding: 0;
+			max-width: 1024px;
+			margin: 0 auto;
+			background-color: #fff;
+		}
+		#wrapper_inner {
+			padding: 1rem 5rem 7rem;
+			max-width: 1024px;
+			margin: 0 auto;
+		}
+		header {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+			margin-bottom: 2rem;
+		}
+		h1 {
+			font-weight: 400;
+			margin: 0;
+			font-size: 2.25rem;
+		}
+		h1 > small {
+			color: #888;
+		}
+		hr {
+			border: 0;
+			border-top: 1px solid #dcdcdc;
+		}
+		small {
+			color: #666;
+		}
+		input[type=button] {
+			background-color: #fafafa;
+			-moz-border-radius: 2px;
+			-webkit-border-radius: 2px;
+			border-radius: 2px;
+			border: 1px solid #dcdcdc;
+			display: inline-block;
+			cursor: pointer;
+			color: #666;
+			padding: 10px 16px;
+			text-decoration: none;
+			text-transform: uppercase;
+			outline: none;
+		}
+		input[type=button]:hover {
+			background-color: #f6f6f6;
+		}
+		input[type=button]:active {
+			position: relative;
+			top: 1px;
+		}
+		section {
+			margin-bottom: 1.5rem;
 		}
 		label {
 			display: block;
 			margin-bottom: 5px;
 		}
-		#wrapper {
-			padding: 15px;
-		}
-		#select1 {
+		#select1,
+		#select1_ajax {
 			width: 250px;
 			padding: 7px 10px;
 		}
-		#select2 {
-			padding: 5px;
+		#select2,
+		#select2_ajax,
+		#select3,
+		#select3_ajax,
+		#select4,
+		#select4_ajax,
+		#select6,
+		#select6_ajax,
+		#select7,
+		#select7_ajax {
 			width: 350px;
 			height: 36px;
 		}
-		#select3 {
-			width: 350px;
-			height: 36px;
-		}		
-		#select4 {
-			width: 350px;
-			height: 36px;
-		}		
-		#select5 {
+		#select2,
+		#select2_ajax {
+			padding: 5px;
+		}
+		#select5,
+		#select5_ajax {
 			width: 350px;
 			height: 50px;
-		}		
-		#select6 {
-			width: 350px;
-			height: 36px;
-		}		
-		#select7 {
-			width: 350px;
-			height: 36px;
 		}		
 	</style>
 	<script src="jquery-1.11.0.min.js"></script>
 	<script src="fm.selectator.jquery.js"></script>
-	<script>
-		$(function () {
-			var $activate_selectator1 = $('#activate_selectator1');
-			$activate_selectator1.click(function () {
-				var $select1 = $('#select1');
-				if ($select1.data('selectator') === undefined) {
-					$select1.selectator({
-						labels: {
-							search: 'Search here...'
-						}
-					});
-					$activate_selectator1.val('destroy selectator');
-				} else {
-					$select1.selectator('destroy');
-					$activate_selectator1.val('activate selectator');
-				}
-			});
-			$activate_selectator1.trigger('click');
-
-			var $activate_selectator2 = $('#activate_selectator2');
-			$activate_selectator2.click(function () {
-				var $select2 = $('#select2');
-				if ($select2.data('selectator') === undefined) {
-					$select2.selectator({
-						useDimmer: true
-					});
-					$activate_selectator2.val('destroy selectator');
-				} else {
-					$select2.selectator('destroy');
-					$activate_selectator2.val('activate selectator');
-				}
-			});
-			$activate_selectator2.trigger('click');
-
-			var $activate_selectator3 = $('#activate_selectator3');
-			$activate_selectator3.click(function () {
-				var $select3 = $('#select3');
-				if ($select3.data('selectator') === undefined) {
-					$select3.selectator({
-						useSearch: false
-					});
-					$activate_selectator3.val('destroy selectator');
-				} else {
-					$select3.selectator('destroy');
-					$activate_selectator3.val('activate selectator');
-				}
-			});
-			$activate_selectator3.trigger('click');
-
-			var $activate_selectator4 = $('#activate_selectator4');
-			$activate_selectator4.click(function () {
-				var $select4 = $('#select4');
-				if ($select4.data('selectator') === undefined) {
-					$select4.selectator({
-						showAllOptionsOnFocus: true
-					});
-					$activate_selectator4.val('destroy selectator');
-				} else {
-					$select4.selectator('destroy');
-					$activate_selectator4.val('activate selectator');
-				}
-			});
-			$activate_selectator4.trigger('click');
-
-			var $activate_selectator5 = $('#activate_selectator5');
-			$activate_selectator5.click(function () {
-				var $select5 = $('#select5');
-				if ($select5.data('selectator') === undefined) {
-					$select5.selectator({
-						useSearch: false
-					});
-					$activate_selectator5.val('destroy selectator');
-				} else {
-					$select5.selectator('destroy');
-					$activate_selectator5.val('activate selectator');
-				}
-			});
-			$activate_selectator5.trigger('click');
-
-			var $activate_selectator6 = $('#activate_selectator6');
-			$activate_selectator6.click(function () {
-				var $select6 = $('#select6');
-				if ($select6.data('selectator') === undefined) {
-					$select6.selectator({
-						showAllOptionsOnFocus: true,
-						keepOpen: true
-					});
-					$activate_selectator6.val('destroy selectator');
-				} else {
-					$select6.selectator('destroy');
-					$activate_selectator6.val('activate selectator');
-				}
-			});
-			$activate_selectator6.trigger('click');
-
-		});
-	</script>
 </head>
 <body>
 	<div id="wrapper">
-		<label for="select1">
-			Singular select with custom content:
-		</label>
-		<select id="select1" name="select1">
-			<option value="">&nbsp;</option>
-			<option value="1" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
-			<option value="2" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
-			<option value="3" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
-			<option value="4" data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
-			<option value="5" data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
-			<option value="6">Six</option>
-			<option value="7">Seven</option>
-			<option value="8">Eight</option>
-			<option value="9">Nine</option>
-			<option value="10">Ten</option>
-			<option value="11">Eleven</option>
-			<option value="12">Twelve</option>
-			<option value="13">Thirteen</option>
-			<option value="14">Fourteen</option>
-			<option value="15">Fifteen</option>
-			<option value="16">Sixteen</option>
-			<option value="17">Seventeen</option>
-			<option value="18">Eighteen</option>
-			<option value="19">Nineteen</option>
-			<option value="20">Twenty</option>
-			<option value="21">Twenty-one</option>
-			<option value="22">Twenty-two</option>
-			<option value="23">Twenty-three</option>
-			<option value="24">Twenty-four</option>
-			<option value="25">Twenty-five</option>
-			<option value="26">Twenty-six</option>
-			<option value="27">Twenty-seven</option>
-			<option value="28">Twenty-eight</option>
-			<option value="29">Twenty-nine</option>
-			<option value="30">Thirty</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator1" type="button">
-		<br>
-		<br>
+		<div id="wrapper_inner">
+	
+			<header>
+				<h1>
+					Selectator <small>by Qodio</small>
+				</h1>
+				<hr>
+				<small>
+					Selectator is a jQuery-based replacement for select boxes. It supports searching, custom renderers, remote data (ajax) and affects the original select box directly, which is used as the data container.
+				</small>
+			</header>
+	
+	
+			<!-- 1 -->
+			<section>
+				<label for="select1">
+					Singular select:
+				</label>
+				<select id="select1" name="select1">
+					<option value="">&nbsp;</option>
+					<option value="1" data-subtitle="The first option" data-left="images/ingi.png" data-right="1" selected>One</option>
+					<option value="2" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
+					<option value="3" data-subtitle="The third option" data-left="images/jogvan.png" data-right="3">Three</option>
+					<option value="4" data-left="images/noimage.png" data-right="4">Four</option>
+					<option value="5" data-left="images/noimage.png" data-right="5">Five</option>
+					<option value="6">Six</option>
+					<option value="7">Seven</option>
+					<option value="8">Eight</option>
+					<option value="9">Nine</option>
+					<option value="10">Ten</option>
+					<option value="11">Eleven</option>
+					<option value="12">Twelve</option>
+					<option value="13">Thirteen</option>
+					<option value="14">Fourteen</option>
+					<option value="15">Fifteen</option>
+					<option value="16">Sixteen</option>
+					<option value="17">Seventeen</option>
+					<option value="18">Eighteen</option>
+					<option value="19">Nineteen</option>
+					<option value="20">Twenty</option>
+					<option value="21">Twenty-one</option>
+					<option value="22">Twenty-two</option>
+					<option value="23">Twenty-three</option>
+					<option value="24">Twenty-four</option>
+					<option value="25">Twenty-five</option>
+					<option value="26">Twenty-six</option>
+					<option value="27">Twenty-seven</option>
+					<option value="28">Twenty-eight</option>
+					<option value="29">Twenty-nine</option>
+					<option value="30">Thirty</option>
+				</select>
+				<input value="activate" id="activate_selectator1" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var $activate_selectator = $('#activate_selectator1');
+						$activate_selectator.click(function () {
+							var $select = $('#select1');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									labels: {
+										search: 'Search here...'
+									},
+									searchFields: 'value text subtitle right'
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+			<section>
+				<label for="select1_ajax">
+					Singular select with remote data:
+				</label>
+				<select id="select1_ajax" name="select1_ajax" placeholder="Please select something..."></select>
+				<input value="activate" id="activate_selectator1_ajax" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var strip_tags = function(str) {
+							return (str + '').replace(/<\/?[^>]+(>|$)/g, '')
+						};
+						var truncate_string = function(str, chars) {
+							if ($.trim(str).length <= chars) {
+								return str;
+							} else {
+								return $.trim(str.substr(0, chars)) + '…';
+							}
+						};
+						var $activate_selectator = $('#activate_selectator1_ajax');
+						$activate_selectator.click(function () {
+							var $select = $('#select1_ajax');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									labels: {
+										search: 'Search here...'
+									},
+									load: function (search, callback) {
+										if (search.length < this.minSearchLength) return callback();
+										$.ajax({
+											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											type: 'GET',
+											dataType: 'json',
+											success: function(data) {
+												callback(data.words.slice(0, 100));
+											},
+											error: function() {
+												callback();
+											}
+										});
+									},
+									delay: 300,
+									minSearchLength: 1,
+									valueField: 'Id',
+									textField: 'DisplayWord',
+									render: {
+										option: function (_item, escape) {
+											var html = '';
+											html += '<div class="selectator_option_title">' + ((typeof _item.DisplayWord !== 'undefined') ? _item.DisplayWord : '') + '</div>';
+											html += '<div class="selectator_option_subtitle">' + ((typeof _item.Explanation !== 'undefined') ? truncate_string(escape(strip_tags(_item.Explanation)), 75) : '') + '</div>';
+											return html;
+										}
+									}
+	
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
 
 
-		<label for="select2">
-			Singular select with dimmer:
-		</label>
-		<select id="select2" name="select2">
-			<option value="1" class="option_one">One</option>
-			<option value="2" class="option_two">Two</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator2" type="button">
-		<br>
-		<br>
+			<!-- 2 -->
+			<section>
+				<label for="select3">
+					Singular select without search:
+				</label>
+				<select id="select3" name="select3">
+					<option value="1" class="option_one">One</option>
+					<option value="2" class="option_two">Two</option>
+				</select>
+				<input value="activate" id="activate_selectator3" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var $activate_selectator = $('#activate_selectator3');
+						$activate_selectator.click(function () {
+							var $select = $('#select3');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									useSearch: false,
+									searchFields: 'value text subtitle right'
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+			<section>
+				<label for="select3_ajax">
+					Singular select without search but with remote data:
+				</label>
+				<select id="select3_ajax" name="select3_ajax"></select>
+				<input value="activate" id="activate_selectator3_ajax" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var strip_tags = function(str) {
+							return (str + '').replace(/<\/?[^>]+(>|$)/g, '')
+						};
+						var truncate_string = function(str, chars) {
+							if ($.trim(str).length <= chars) {
+								return str;
+							} else {
+								return $.trim(str.substr(0, chars)) + '…';
+							}
+						};
+						var $activate_selectator = $('#activate_selectator3_ajax');
+						$activate_selectator.click(function () {
+							var $select = $('#select3_ajax');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									useSearch: false,
+									load: function (search, callback) {
+										if (search.length < this.minSearchLength) return callback();
+										$.ajax({
+											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											type: 'GET',
+											dataType: 'json',
+											success: function(data) {
+												callback(data.words.slice(0, 100));
+											},
+											error: function() {
+												callback();
+											}
+										});
+									},
+									placeholder: 'Please select something...',
+									delay: 300,
+									minSearchLength: 1,
+									valueField: 'Id',
+									textField: 'DisplayWord',
+									render: {
+										option: function (_item, escape) {
+											var html = '';
+											html += '<div class="selectator_option_title">' + ((typeof _item.DisplayWord !== 'undefined') ? _item.DisplayWord : '') + '</div>';
+											html += '<div class="selectator_option_subtitle">' + ((typeof _item.Explanation !== 'undefined') ? truncate_string(escape(strip_tags(_item.Explanation)), 75) : '') + '</div>';
+											return html;
+										}
+									}
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+	
+			<!-- 3 -->
+			<section>
+				<label for="select4">
+					Multi select:
+				</label>
+				<select id="select4" name="select4" multiple>
+					<optgroup label="Group one" class="group_one">
+						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
+						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
+					</optgroup>
+					<optgroup label="Group two" class="group_two">
+						<option value="3" class="option_three" data-subtitle="The third option" data-left="images/jogvan.png" data-right="3">Three</option>
+						<option value="4" class="option_four" selected data-left="images/noimage.png" data-right="4">Four</option>
+						<option value="5" class="option_five" selected data-left="images/noimage.png" data-right="5">Five</option>
+						<option value="6" class="option_six">Six</option>
+					</optgroup>
+					<optgroup label="Group three" class="group_three">
+						<option value="7" class="option_seven">Seven</option>
+					</optgroup>
+					<option value="8" class="option_eight" data-subtitle="This is just another test text">Eight</option>
+					<option value="9" class="option_nine">Nine</option>
+					<option value="10" class="option_ten" selected>Ten</option>
+					<option value="11" class="option_eleven" selected>Eleven</option>
+					<option value="12" class="option_twelve">Twelve</option>
+					<option value="13" class="option_thirteen">Thirteen</option>
+					<option value="14" class="option_fourteen">Fourteen</option>
+				</select>
+				<input value="activate" id="activate_selectator4" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var $activate_selectator = $('#activate_selectator4');
+						$activate_selectator.click(function () {
+							var $select = $('#select4');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									showAllOptionsOnFocus: true,
+									searchFields: 'value text subtitle right'
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+			<section>
+				<label for="select4_ajax">
+					Multi select with remote data:
+				</label>
+				<select id="select4_ajax" name="select4_ajax" multiple></select>
+				<input value="activate" id="activate_selectator4_ajax" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var strip_tags = function(str) {
+							return (str + '').replace(/<\/?[^>]+(>|$)/g, '')
+						};
+						var truncate_string = function(str, chars) {
+							if ($.trim(str).length <= chars) {
+								return str;
+							} else {
+								return $.trim(str.substr(0, chars)) + '…';
+							}
+						};
+						var $activate_selectator = $('#activate_selectator4_ajax');
+						$activate_selectator.click(function () {
+							var $select = $('#select4_ajax');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									showAllOptionsOnFocus: true,
+									load: function (search, callback) {
+										if (search.length < this.minSearchLength) return callback();
+										$.ajax({
+											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											type: 'GET',
+											dataType: 'json',
+											success: function(data) {
+												callback(data.words.slice(0, 100));
+											},
+											error: function() {
+												callback();
+											}
+										});
+									},
+									placeholder: 'Search...',
+									delay: 300,
+									minSearchLength: 1,
+									valueField: 'Id',
+									textField: 'DisplayWord',
+									render: {
+										option: function (_item, escape) {
+											var html = '';
+											html += '<div class="selectator_option_title">' + ((typeof _item.DisplayWord !== 'undefined') ? _item.DisplayWord : '') + '</div>';
+											html += '<div class="selectator_option_subtitle">' + ((typeof _item.Explanation !== 'undefined') ? truncate_string(escape(strip_tags(_item.Explanation)), 75) : '') + '</div>';
+											return html;
+										}
+									}
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+	
+			<!-- 4 -->
+			<section>
+				<label for="select5">
+					Multi select without search:
+				</label>
+				<select id="select5" name="select5" multiple>
+					<optgroup label="Group one">
+						<option value="1" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
+						<option value="2" selected  data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
+					</optgroup>
+					<optgroup label="Group two">
+						<option value="3" data-subtitle="The third option" data-left="images/jogvan.png" data-right="3">Three</option>
+						<option value="4" data-left="images/noimage.png" data-right="4">Four</option>
+						<option value="5" data-left="images/noimage.png" data-right="5">Five</option>
+						<option value="6">Six</option>
+					</optgroup>
+					<optgroup label="Group three">
+						<option value="7">Seven</option>
+					</optgroup>
+					<option value="8" data-subtitle="This is just another test text">Eight</option>
+					<option value="9">Nine</option>
+					<option value="10">Ten</option>
+					<option value="11">Eleven</option>
+					<option value="12">Twelve</option>
+					<option value="13" selected>Thirteen</option>
+					<option value="14">Fourteen</option>
+				</select>
+				<input value="activate" id="activate_selectator5" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var $activate_selectator = $('#activate_selectator5');
+						$activate_selectator.click(function () {
+							var $select = $('#select5');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									useSearch: false,
+									searchFields: 'value text subtitle right'
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+			<section>
+				<label for="select5_ajax">
+					Multi select without search but with remote data:
+				</label>
+				<select id="select5_ajax" name="select5_ajax" multiple></select>
+				<input value="activate" id="activate_selectator5_ajax" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var strip_tags = function(str) {
+							return (str + '').replace(/<\/?[^>]+(>|$)/g, '')
+						};
+						var truncate_string = function(str, chars) {
+							if ($.trim(str).length <= chars) {
+								return str;
+							} else {
+								return $.trim(str.substr(0, chars)) + '…';
+							}
+						};
+						var $activate_selectator = $('#activate_selectator5_ajax');
+						$activate_selectator.click(function () {
+							var $select = $('#select5_ajax');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									useSearch: false,
+									load: function (search, callback) {
+										if (search.length < this.minSearchLength) return callback();
+										$.ajax({
+											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											type: 'GET',
+											dataType: 'json',
+											success: function(data) {
+												callback(data.words.slice(0, 100));
+											},
+											error: function() {
+												callback();
+											}
+										});
+									},
+									placeholder: 'Search...',
+									delay: 300,
+									minSearchLength: 1,
+									valueField: 'Id',
+									textField: 'DisplayWord',
+									render: {
+										option: function (_item, escape) {
+											var html = '';
+											html += '<div class="selectator_option_title">' + ((typeof _item.DisplayWord !== 'undefined') ? _item.DisplayWord : '') + '</div>';
+											html += '<div class="selectator_option_subtitle">' + ((typeof _item.Explanation !== 'undefined') ? truncate_string(escape(strip_tags(_item.Explanation)), 75) : '') + '</div>';
+											return html;
+										}
+									}
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+	
+			<!-- 5 -->
+			<section>
+				<label for="select6">
+					Multi select with keep open:
+				</label>
+				<select id="select6" name="select6" multiple>
+					<optgroup label="Group one" class="group_one">
+						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
+						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
+					</optgroup>
+					<optgroup label="Group two" class="group_two">
+						<option value="3" class="option_three" data-subtitle="The third option" data-left="images/jogvan.png" data-right="3">Three</option>
+						<option value="4" class="option_four" selected data-left="images/noimage.png" data-right="4">Four</option>
+						<option value="5" class="option_five" selected data-left="images/noimage.png" data-right="5">Five</option>
+						<option value="6" class="option_six">Six</option>
+					</optgroup>
+					<optgroup label="Group three" class="group_three">
+						<option value="7" class="option_seven">Seven</option>
+					</optgroup>
+					<option value="8" class="option_eight" data-subtitle="This is just another test text">Eight</option>
+					<option value="9" class="option_nine">Nine</option>
+					<option value="10" class="option_ten" selected>Ten</option>
+					<option value="11" class="option_eleven" selected>Eleven</option>
+					<option value="12" class="option_twelve">Twelve</option>
+					<option value="13" class="option_thirteen">Thirteen</option>
+					<option value="14" class="option_fourteen">Fourteen</option>
+				</select>
+				<input value="activate" id="activate_selectator6" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var $activate_selectator = $('#activate_selectator6');
+						$activate_selectator.click(function () {
+							var $select = $('#select6');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									showAllOptionsOnFocus: true,
+									keepOpen: true,
+									searchFields: 'value text subtitle right'
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+			<section>
+				<label for="select6_ajax">
+					Multi select with keep open and with remote data:
+				</label>
+				<select id="select6_ajax" name="select6_ajax" multiple></select>
+				<input value="activate" id="activate_selectator6_ajax" type="button">
+				<script type="text/javascript">
+					$(function () {
+						var strip_tags = function(str) {
+							return (str + '').replace(/<\/?[^>]+(>|$)/g, '')
+						};
+						var truncate_string = function(str, chars) {
+							if ($.trim(str).length <= chars) {
+								return str;
+							} else {
+								return $.trim(str.substr(0, chars)) + '…';
+							}
+						};
+						var $activate_selectator = $('#activate_selectator6_ajax');
+						$activate_selectator.click(function () {
+							var $select = $('#select6_ajax');
+							if ($select.data('selectator') === undefined) {
+								$select.selectator({
+									showAllOptionsOnFocus: true,
+									keepOpen: true,
+									load: function (search, callback) {
+										if (search.length < this.minSearchLength) return callback();
+										$.ajax({
+											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											type: 'GET',
+											dataType: 'json',
+											success: function(data) {
+												callback(data.words.slice(0, 100));
+											},
+											error: function() {
+												callback();
+											}
+										});
+									},
+									placeholder: 'Search...',
+									delay: 300,
+									minSearchLength: 1,
+									valueField: 'Id',
+									textField: 'DisplayWord',
+									render: {
+										option: function (_item, escape) {
+											var html = '';
+											html += '<div class="selectator_option_title">' + ((typeof _item.DisplayWord !== 'undefined') ? _item.DisplayWord : '') + '</div>';
+											html += '<div class="selectator_option_subtitle">' + ((typeof _item.Explanation !== 'undefined') ? truncate_string(escape(strip_tags(_item.Explanation)), 75) : '') + '</div>';
+											return html;
+										}
+									}
+								});
+								$activate_selectator.val('destroy');
+							} else {
+								$select.selectator('destroy');
+								$activate_selectator.val('activate');
+							}
+						});
+						$activate_selectator.trigger('click');
+					});
+				</script>
+			</section>
+	
+	
+			<!-- 6 -->
+			<section>
+				<label for="select7">
+					Inline markup initialized
+				</label>
+				<label>
+					<small><em>&lt;select multiple class=&quot;selectator&quot; data-selectator-keep-open=&quot;true&quot; data-selectator-show-all-options-on-focus=&quot;true&quot; data-selectator-search-fields=&quot;value text subtitle right&quot;&gt;</em></small>
+				</label>
+				<select id="select7" name="select7" multiple class="selectator" data-selectator-keep-open="true" data-selectator-show-all-options-on-focus="true" data-selectator-search-fields="value text subtitle right">
+					<optgroup label="Group one" class="group_one">
+						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
+						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
+					</optgroup>
+					<optgroup label="Group two" class="group_two">
+						<option value="3" class="option_three" data-subtitle="The third option" data-left="images/jogvan.png" data-right="3">Three</option>
+						<option value="4" class="option_four" selected data-left="images/noimage.png" data-right="4">Four</option>
+						<option value="5" class="option_five" selected data-left="images/noimage.png" data-right="5">Five</option>
+						<option value="6" class="option_six">Six</option>
+					</optgroup>
+					<optgroup label="Group three" class="group_three">
+						<option value="7" class="option_seven">Seven</option>
+					</optgroup>
+					<option value="8" class="option_eight" data-subtitle="This is just another test text">Eight</option>
+					<option value="9" class="option_nine">Nine</option>
+					<option value="10" class="option_ten" selected>Ten</option>
+					<option value="11" class="option_eleven" selected>Eleven</option>
+					<option value="12" class="option_twelve">Twelve</option>
+					<option value="13" class="option_thirteen">Thirteen</option>
+					<option value="14" class="option_fourteen">Fourteen</option>
+				</select>
+			</section>
 
 
-		<label for="select3">
-			Singular select without search:
-		</label>
-		<select id="select3" name="select3">
-			<option value="1">One</option>
-			<option value="2">Two</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator3" type="button">
-		<br>
-		<br>
-
-
-		<label for="select4">
-			Multi select with custom content:
-		</label>
-		<select id="select4" name="select4" multiple>
-			<optgroup label="Group one" class="group_one">
-				<option value="1" class="option_one" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
-				<option value="2" class="option_two" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
-			</optgroup>
-			<optgroup label="Group two" class="group_two">
-				<option value="3" class="option_three" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
-				<option value="4" class="option_four" selected data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
-				<option value="5" class="option_five" selected data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
-				<option value="6" class="option_six">Six</option>
-			</optgroup>
-			<optgroup label="Group three" class="group_three">
-				<option value="7" class="option_seven">Seven</option>
-			</optgroup>
-			<option value="8" class="option_eight" data-subtitle="Otte">Eight</option>
-			<option value="9" class="option_nine">Nine</option>
-			<option value="10" class="option_ten" selected>Ten</option>
-			<option value="11" class="option_eleven" selected>Eleven</option>
-			<option value="12" class="option_twelve">Twelve</option>
-			<option value="13" class="option_thirteen">Thirteen</option>
-			<option value="14" class="option_fourteen">Fourteen</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator4" type="button">
-		<br>
-		<br>
-
-
-		<label for="select5">
-			Multi select with custom content and without search:
-		</label>
-		<select id="select5" name="select5" multiple>
-			<optgroup label="Group one">
-				<option value="1" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
-				<option value="2" selected  data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
-			</optgroup>
-			<optgroup label="Group two">
-				<option value="3" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
-				<option value="4" data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
-				<option value="5" data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
-				<option value="6">Six</option>
-			</optgroup>
-			<optgroup label="Group three">
-				<option value="7">Seven</option>
-			</optgroup>
-			<option value="8" data-subtitle="Otte">Eight</option>
-			<option value="9">Nine</option>
-			<option value="10">Ten</option>
-			<option value="11">Eleven</option>
-			<option value="12">Twelve</option>
-			<option value="13" selected>Thirteen</option>
-			<option value="14">Fourteen</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator5" type="button">
-		<br>
-		<br>
-
-
-		<label for="select6">
-			Multi select with custom content and keep open:
-		</label>
-		<select id="select6" name="select6" multiple>
-			<optgroup label="Group one" class="group_one">
-				<option value="1" class="option_one" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
-				<option value="2" class="option_two" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
-			</optgroup>
-			<optgroup label="Group two" class="group_two">
-				<option value="3" class="option_three" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
-				<option value="4" class="option_four" selected data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
-				<option value="5" class="option_five" selected data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
-				<option value="6" class="option_six">Six</option>
-			</optgroup>
-			<optgroup label="Group three" class="group_three">
-				<option value="7" class="option_seven">Seven</option>
-			</optgroup>
-			<option value="8" class="option_eight" data-subtitle="Otte">Eight</option>
-			<option value="9" class="option_nine">Nine</option>
-			<option value="10" class="option_ten" selected>Ten</option>
-			<option value="11" class="option_eleven" selected>Eleven</option>
-			<option value="12" class="option_twelve">Twelve</option>
-			<option value="13" class="option_thirteen">Thirteen</option>
-			<option value="14" class="option_fourteen">Fourteen</option>
-		</select>
-		<input value="activate selectator" id="activate_selectator6" type="button">
-		<br>
-		<br>
-
-
-		<label for="select7">
-			Inline markup initialized
-		</label>
-		<pre>&lt;select multiple class=&quot;selectator&quot; data-selectator-keep-open=&quot;true&quot;&gt;</pre>
-		<select id="select7" name="select6" multiple class="selectator" data-selectator-keep-open="true">
-			<optgroup label="Group one" class="group_one">
-				<option value="1" class="option_one" data-subtitle="Et" data-left="<img src='images/ingi.png'>" data-right="1">One</option>
-				<option value="2" class="option_two" data-subtitle="To" data-left="<img src='images/runa.png'>" data-right="2">Two</option>
-			</optgroup>
-			<optgroup label="Group two" class="group_two">
-				<option value="3" class="option_three" data-subtitle="Tre" data-left="<img src='images/jogvan.png'>" data-right="3">Three</option>
-				<option value="4" class="option_four" selected data-left="<img src='images/noimage.png'>" data-right="4">Four</option>
-				<option value="5" class="option_five" selected data-left="<img src='images/noimage.png'>" data-right="5">Five</option>
-				<option value="6" class="option_six">Six</option>
-			</optgroup>
-			<optgroup label="Group three" class="group_three">
-				<option value="7" class="option_seven">Seven</option>
-			</optgroup>
-			<option value="8" class="option_eight" data-subtitle="Otte">Eight</option>
-			<option value="9" class="option_nine">Nine</option>
-			<option value="10" class="option_ten" selected>Ten</option>
-			<option value="11" class="option_eleven" selected>Eleven</option>
-			<option value="12" class="option_twelve">Twelve</option>
-			<option value="13" class="option_thirteen">Thirteen</option>
-			<option value="14" class="option_fourteen">Fourteen</option>
-		</select>
-		<br>
-		<br>
-
+		</div>
 	</div>
 
+	<a class="github-fork-ribbon" href="https://github.com/qodio/selectator" title="Fork me on GitHub">Fork me on GitHub</a>
+	<style type="text/css">
+		.github-fork-ribbon:before {
+			background-color: #090
+		}
+	</style>
 </body>
 </html>
