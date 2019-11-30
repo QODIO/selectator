@@ -48,24 +48,24 @@
 			render: {
 				selected_item: function (_item, escape) {
 					var html = '';
-					if (typeof _item.left !== 'undefined') 
+					if (typeof _item.left !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'selected_item_left"><img src="' + escape(_item.left) + '"></div>';
-					if (typeof _item.right !== 'undefined') 
+					if (typeof _item.right !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'selected_item_right">' + escape(_item.right) + '</div>';
 					html += '<div class="' + self.options.prefix + 'selected_item_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
-					if (typeof _item.subtitle !== 'undefined') 
+					if (typeof _item.subtitle !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'selected_item_subtitle">' + escape(_item.subtitle) + '</div>';
 					html += '<div class="' + self.options.prefix + 'selected_item_remove">X</div>';
 					return html;
 				},
 				option: function (_item, escape) {
 					var html = '';
-					if (typeof _item.left !== 'undefined') 
+					if (typeof _item.left !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'option_left"><img src="' + escape(_item.left) + '"></div>';
-					if (typeof _item.right !== 'undefined') 
+					if (typeof _item.right !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'option_right">' + escape(_item.right) + '</div>';
 					html += '<div class="' + self.options.prefix + 'option_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
-					if (typeof _item.subtitle !== 'undefined') 
+					if (typeof _item.subtitle !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'option_subtitle">' + escape(_item.subtitle) + '</div>';
 					return html;
 				}
@@ -108,8 +108,8 @@
 			down:     40
 		};
 
-		
-		
+
+
 		// INITIALIZE PLUGIN
 		self.init = function () {
 			self.options = $.extend(true, {}, defaults, _options);
@@ -374,7 +374,7 @@
 				renderOptions();
 				renderSelectedItems();
 			});
-			
+
 			// bind option events
 			self.$container_element.on('mouseover', '.' + self.options.prefix + 'option', function () {
 				var $active = self.$options_element.find('.active');
@@ -447,7 +447,7 @@
 					if (is_single && (data[self.options.valueField] == '' || typeof data[self.options.valueField] === 'undefined' || self.$source_element.find('[value=""]').length === 0)) {
 						$item_element.find('.' + self.options.prefix + 'selected_item_remove').remove();
 					}
-					self.$selecteditems_element.append($item_element);
+					self.$selecteditems_element.html($item_element);
 				}
 			});
 			if (is_single) {
@@ -515,7 +515,7 @@
 			});
 			filterResults(self.usefilterResults);
 		};
-		
+
 
 		// CREATE RESULT OPTION
 		var createOption = function (_isGroupOption) {
@@ -548,13 +548,13 @@
 			if (is_multiple && this.selected) {
 				$option.hide();
 			}
-			
+
 			$option.append(self.options.render.option(data, escape));
-			
+
 			return $option;
 		};
-		
-		
+
+
 		// LOAD SEARCH RESULTS (IF NEEDED)
 		var load = function () {
 			clearTimeout(delayTimer);
@@ -594,7 +594,7 @@
 			}, self.options.delay);
 		};
 
-		
+
 		// FILTER SEARCH RESULTS
 		var filterResults = function (usefilterResults) {
 			usefilterResults = typeof usefilterResults !== 'undefined' ? usefilterResults : false;
@@ -634,14 +634,14 @@
 					}
 				});
 				if (
-					(!usefilterResults 
+					(!usefilterResults
 						&& !source_option_element.selected
 					)
 					|| (usefilterResults
 						&& (
-							!source_option_element.selected 
+							!source_option_element.selected
 							|| is_single
-						) 
+						)
 						&& (
 							self.options.useSearch
 							&& (
@@ -751,7 +751,7 @@
 			}
 		};
 
-		
+
 		// ESCAPE FUNCTION
 		var escape = function(str) {
 			return (str + '')
@@ -778,11 +778,11 @@
 			}
 		};
 
-		
+
 		// Initialize plugin
 		self.init();
 	};
-	
+
 	// Initializer
 	$.fn.selectator = function(_options) {
 		var options = _options !== undefined ? _options : {};
