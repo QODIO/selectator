@@ -137,12 +137,12 @@ Class                           | Description
 `prefix_`option_left            | The left section of the result option.
 `prefix_`option_right           | The right section of the result option.
 `prefix_`option_subtitle        | The bottom section of the result option.
-`prefix_`dimmer                 | This is the dimmer
+`prefix_`mask                   | This is the mask (dimmer)
 
 
 DOM Structure
 -------------
-* dimmer
+* mask
 * element: *containing the `single`|`multiple` class and the `options-visible`|`options-hidden` class*
     * textlength
     * selected_items
