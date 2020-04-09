@@ -83,6 +83,7 @@
 		self.$input_element = null;
 		self.$textlength_element = null;
 		self.$options_element = null;
+		self.$mask_element = null;
 		self.usefilterResults = true;
 		var is_single = self.$source_element.attr('multiple') === undefined;
 		var is_multiple = !is_single;
@@ -126,14 +127,19 @@
 			using_remote_data = self.options.load !== null;
 
 			//// ================== CREATE ELEMENTS ================== ////
-			// dimmer
-			if (self.options.useDimmer) {
-				if ($('#' + self.options.prefix + 'dimmer').length === 0) {
-					var $dimmer_element = $(document.createElement('div'));
-					$dimmer_element.attr('id', self.options.prefix + 'dimmer');
-					$dimmer_element.hide();
-					$(document.body).prepend($dimmer_element);
-				}
+			// mask
+			self.$mask_element = $('#' + self.options.prefix + 'mask');
+			// console.log(self.$mask_element.length);
+			// alert(self.$mask_element.length);
+			if (self.$mask_element.length === 0) {
+				self.$mask_element = $(document.createElement('div'));
+				self.$mask_element.attr('id', self.options.prefix + 'mask');
+				self.$mask_element.attr('onclick', 'void(0)');
+				self.$mask_element.on('click', function () {
+					$(':focus').blur();
+				});
+				self.$mask_element.hide();
+				$(document.body).prepend(self.$mask_element);
 			}
 			// source element
 			self.$source_element.addClass('selectator');
@@ -145,9 +151,6 @@
 			if (self.$source_element.attr('id') !== undefined) {
 				self.$container_element.attr('id', self.options.prefix + self.$source_element.attr('id'));
 			}
-			self.$container_element.on('touchleave touchcancel', function () {
-				alert('test');
-			});
 			self.$container_element.addClass(self.options.prefix + 'element ' + (is_multiple ? 'multiple ' : 'single ') + 'options-hidden');
 			if (!self.options.useSearch) {
 				self.$container_element.addClass('disable_search');
@@ -209,14 +212,6 @@
 			self.$container_element.append(self.$options_element);
 			self.$source_element.after(self.$container_element);
 			self.$source_element.hide();
-
-			// Add scrollator if found
-			if (typeof Scrollator !== 'undefined') {
-				self.$options_element.scrollator({
-					zIndex: 1001,
-					customClass : 'ease_preventOverlay'
-				});
-			}
 
 
 			//// ================== BIND ELEMENTS EVENTS ================== ////
@@ -366,7 +361,7 @@
 			});
 
 			// bind selected item events
-			self.$container_element.on('mouseup', '.' + self.options.prefix + 'selected_item_remove', function () {
+			self.$container_element.on('mousedown', '.' + self.options.prefix + 'selected_item_remove', function () {
 				var source_item_element = $(this).closest('.' + self.options.prefix + 'selected_item').data('source_item_element');
 				source_item_element.removeAttribute('selected');
 				source_item_element.selected = false;
@@ -397,6 +392,10 @@
 			});
 			self.$container_element.on('click', '.' + self.options.prefix + 'option', function (_e) {
 				_e.stopPropagation();
+				var $active = self.$options_element.find('.active');
+				$active.removeClass('active');
+				var $this = $(this);
+				$this.addClass('active');
 			});
 
 			// Make elements accesible from options
@@ -528,6 +527,7 @@
 			// holder li
 			var $option = $(document.createElement('li'));
 			$option.data('source_option_element', this);
+			$option.attr('onclick', 'void(0)');
 			$option.addClass(self.options.prefix + 'option');
 			$option.addClass(self.options.prefix + 'value_' + $(this).val().replace(/\W/g, ''));
 			if (_isGroupOption) {
@@ -693,18 +693,18 @@
 		};
 
 
-		// SHOW OPTIONS AND DIMMER
+		// SHOW OPTIONS AND MASK
 		var showDropdown = function () {
 			if (self.$input_element.is(':focus') && (has_visible_options || is_single ) && !(self.$options_element.is(':empty') && !self.options.useSearch)) {
 				self.$container_element.removeClass('options-hidden').addClass('options-visible');
+				self.$mask_element.show();
 				if (self.options.useDimmer) {
-					$('#' + self.options.prefix + 'dimmer').show();
+					self.$mask_element.addClass(self.options.prefix + 'mask_dimmed');
+				} else {
+					self.$mask_element.removeClass(self.options.prefix + 'mask_dimmed');
 				}
 				setTimeout(function () {
 					self.$options_element.css('top', (self.$container_element.outerHeight() + (is_multiple ? 0 : self.$input_element.outerHeight()) - 1) + 'px');
-					if (typeof Scrollator !== 'undefined') {
-						self.$options_element.data('scrollator').show();
-					}
 				}, 1);
 				scrollToActiveOption();
 			} else {
@@ -713,15 +713,11 @@
 		};
 
 
-		// HIDE OPTIONS AND DIMMER
+		// HIDE OPTIONS AND MASK
 		var hideDropdown = function () {
 			self.$container_element.removeClass('options-visible').addClass('options-hidden');
-			if (typeof Scrollator !== 'undefined') {
-				self.$options_element.data('scrollator').hide();
-			}
-			if (self.options.useDimmer) {
-				$('#' + self.options.prefix + 'dimmer').hide();
-			}
+			self.$mask_element.removeClass(self.options.prefix + 'mask_dimmed');
+			self.$mask_element.hide();
 		};
 
 
@@ -737,6 +733,11 @@
 		// SELECT ACTIVE OPTION
 		var selectOption = function () {
 			// select option
+			if (is_single) {
+				var lastSelectedItem = self.$source_element.find('option:selected').last()[0];
+				lastSelectedItem.removeAttribute('selected');
+				lastSelectedItem.selected = false;
+			}
 			var $active = self.$options_element.find('.active');
 			$active.data('source_option_element').setAttribute('selected', '');
 			$active.data('source_option_element').selected = true;
@@ -780,7 +781,7 @@
 			$.removeData(_element, 'selectator');
 			self.$source_element.show();
 			if ($('.' + self.options.prefix + 'element').length === 0) {
-				$('#' + self.options.prefix + 'dimmer').remove();
+				self.$mask_element.remove();
 			}
 		};
 

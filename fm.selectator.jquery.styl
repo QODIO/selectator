@@ -1,13 +1,13 @@
-/** 
+/**
  * Selectator jQuery Plugin
  * A plugin for select elements
  * version 3.0, Apr 8th, 2016
  * by Ingi á Steinamørk
  */
 
-/* dimmer */
-#selectator_dimmer
-	background-color rgba(#000, .1)
+/* mask */
+#selectator_mask
+	background-color transparent
 	width 100%
 	height 100%
 	left 0
@@ -16,6 +16,9 @@
 	right 0
 	position fixed
 	z-index 100
+
+	&.selectator_mask_dimmed
+		background-color rgba(#000, .1)
 
 /* spinner keyframes */
 @keyframes selectator_spinner
@@ -46,6 +49,7 @@
 		padding 7px 10px !important
 	&.focused
 		box-shadow 0 0 1px #39f
+		z-index 101
 	&:after
 		position absolute
 		cursor pointer

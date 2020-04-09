@@ -2,12 +2,9 @@
 <html lang="en">
 <head>
 	<title>Selectator Plugin</title>
-	<link href="fm.selectator.jquery.css" rel="stylesheet" type="text/css">
+	<link href="fm.selectator.jquery.css?cb=29" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,400,300" rel="stylesheet" type="text/css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.min.css" rel="stylesheet">
-	<!--[if lt IE 9]>
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.ie.min.css" rel="stylesheet">
-	<![endif]-->
 	<style>
 		body {
 			font-family: 'Open Sans', sans-serif;
@@ -114,7 +111,7 @@
 		}
 	</style>
 	<script src="jquery-3.4.1.min.js"></script>
-	<script src="fm.selectator.jquery.js?cb=2"></script>
+	<script src="fm.selectator.jquery.js?cb=29"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -180,6 +177,7 @@
 									labels: {
 										search: 'Search here...'
 									},
+									useDimmer: true,
 									searchFields: 'value text subtitle right'
 								});
 								$activate_selectator.val('destroy');
@@ -391,6 +389,7 @@
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									showAllOptionsOnFocus: true,
+									useDimmer: true,
 									searchFields: 'value text subtitle right'
 								});
 								$activate_selectator.val('destroy');
