@@ -82,32 +82,44 @@
 		#select2_ajax,
 		#select3,
 		#select3_ajax,
-		#select4,
-		#select4_ajax,
-		#select6,
-		#select6_ajax,
-		#select7,
-		#select7_ajax {
+		#select5,
+		#select5_ajax,
+		#select6 {
 			width: 350px;
 			height: 36px;
 		}
-		#select2,
-		#select2_ajax {
-			padding: 5px;
-		}
-		#select5,
-		#select5_ajax {
+		#select4,
+		#select4_ajax {
 			width: 350px;
 			height: 50px;
-		}		
+		}
+		.option_one,
+		.option_two,
+		.option_three,
+		.option_four,
+		.option_five,
+		.option_six,
+		.option_seven,
+		.option_eight,
+		.option_nine,
+		.option_ten,
+		.option_eleven,
+		.option_twelve,
+		.option_thirteen,
+		.option_fourteen {
+		}
+		.group_one,
+		.group_two,
+		.group_three {
+		}
 	</style>
-	<script src="jquery-1.11.0.min.js"></script>
-	<script src="fm.selectator.jquery.js"></script>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script src="fm.selectator.jquery.js?cb=2"></script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="wrapper_inner">
-	
+
 			<header>
 				<h1>
 					Selectator <small>by Qodio</small>
@@ -117,9 +129,9 @@
 					Selectator is a jQuery-based replacement for select boxes. It supports searching, custom renderers, remote data (ajax) and affects the original select box directly, which is used as the data container.
 				</small>
 			</header>
-	
-	
-			<!-- 1 -->
+
+
+			<!-- Singular select -->
 			<section>
 				<label for="select1">
 					Singular select:
@@ -180,7 +192,8 @@
 					});
 				</script>
 			</section>
-	
+
+			<!-- Singular select with remote data -->
 			<section>
 				<label for="select1_ajax">
 					Singular select with remote data:
@@ -210,7 +223,7 @@
 									load: function (search, callback) {
 										if (search.length < this.minSearchLength) return callback();
 										$.ajax({
-											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											url: 'https://sprotin.fo/dictionary_search_json.php?DictionaryId=3&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchInflections=0&SearchDescriptions=0&Group=&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
 											type: 'GET',
 											dataType: 'json',
 											success: function(data) {
@@ -233,7 +246,7 @@
 											return html;
 										}
 									}
-	
+
 								});
 								$activate_selectator.val('destroy');
 							} else {
@@ -247,12 +260,12 @@
 			</section>
 
 
-			<!-- 2 -->
+			<!-- Singular select without search -->
 			<section>
-				<label for="select3">
+				<label for="select2">
 					Singular select without search:
 				</label>
-				<select id="select3" name="select3">
+				<select id="select2" name="select2">
 					<option value="1" class="option_one">One</option>
 					<option value="2" class="option_two">Two</option>
 				</select>
@@ -261,7 +274,7 @@
 					$(function () {
 						var $activate_selectator = $('#activate_selectator3');
 						$activate_selectator.click(function () {
-							var $select = $('#select3');
+							var $select = $('#select2');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									useSearch: false,
@@ -277,12 +290,13 @@
 					});
 				</script>
 			</section>
-	
+
+			<!-- Singular select without search but with remote data -->
 			<section>
-				<label for="select3_ajax">
+				<label for="select2_ajax">
 					Singular select without search but with remote data:
 				</label>
-				<select id="select3_ajax" name="select3_ajax"></select>
+				<select id="select2_ajax" name="select2_ajax"></select>
 				<input value="activate" id="activate_selectator3_ajax" type="button">
 				<script type="text/javascript">
 					$(function () {
@@ -298,14 +312,14 @@
 						};
 						var $activate_selectator = $('#activate_selectator3_ajax');
 						$activate_selectator.click(function () {
-							var $select = $('#select3_ajax');
+							var $select = $('#select2_ajax');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									useSearch: false,
 									load: function (search, callback) {
 										if (search.length < this.minSearchLength) return callback();
 										$.ajax({
-											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											url: 'https://sprotin.fo/dictionary_search_json.php?DictionaryId=3&DictionaryPage=1&SearchFor=tea&SearchInflections=0&SearchDescriptions=0&Group=&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
 											type: 'GET',
 											dataType: 'json',
 											success: function(data) {
@@ -318,7 +332,6 @@
 									},
 									placeholder: 'Please select something...',
 									delay: 300,
-									minSearchLength: 1,
 									valueField: 'Id',
 									textField: 'DisplayWord',
 									render: {
@@ -340,14 +353,14 @@
 					});
 				</script>
 			</section>
-	
-	
-			<!-- 3 -->
+
+
+			<!-- Multi select -->
 			<section>
-				<label for="select4">
+				<label for="select3">
 					Multi select:
 				</label>
-				<select id="select4" name="select4" multiple>
+				<select id="select3" name="select3" multiple>
 					<optgroup label="Group one" class="group_one">
 						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
 						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
@@ -374,7 +387,7 @@
 					$(function () {
 						var $activate_selectator = $('#activate_selectator4');
 						$activate_selectator.click(function () {
-							var $select = $('#select4');
+							var $select = $('#select3');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									showAllOptionsOnFocus: true,
@@ -390,12 +403,13 @@
 					});
 				</script>
 			</section>
-	
+
+			<!-- Multi select with remote data -->
 			<section>
-				<label for="select4_ajax">
+				<label for="select3_ajax">
 					Multi select with remote data:
 				</label>
-				<select id="select4_ajax" name="select4_ajax" multiple></select>
+				<select id="select3_ajax" name="select3_ajax" multiple></select>
 				<input value="activate" id="activate_selectator4_ajax" type="button">
 				<script type="text/javascript">
 					$(function () {
@@ -411,14 +425,14 @@
 						};
 						var $activate_selectator = $('#activate_selectator4_ajax');
 						$activate_selectator.click(function () {
-							var $select = $('#select4_ajax');
+							var $select = $('#select3_ajax');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									showAllOptionsOnFocus: true,
 									load: function (search, callback) {
 										if (search.length < this.minSearchLength) return callback();
 										$.ajax({
-											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											url: 'https://sprotin.fo/dictionary_search_json.php?DictionaryId=3&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchInflections=0&SearchDescriptions=0&Group=&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
 											type: 'GET',
 											dataType: 'json',
 											success: function(data) {
@@ -453,14 +467,14 @@
 					});
 				</script>
 			</section>
-	
-	
-			<!-- 4 -->
+
+
+			<!-- Multi select without search -->
 			<section>
-				<label for="select5">
+				<label for="select4">
 					Multi select without search:
 				</label>
-				<select id="select5" name="select5" multiple>
+				<select id="select4" name="select4" multiple>
 					<optgroup label="Group one">
 						<option value="1" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
 						<option value="2" selected  data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
@@ -487,7 +501,7 @@
 					$(function () {
 						var $activate_selectator = $('#activate_selectator5');
 						$activate_selectator.click(function () {
-							var $select = $('#select5');
+							var $select = $('#select4');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									useSearch: false,
@@ -503,12 +517,13 @@
 					});
 				</script>
 			</section>
-	
+
+			<!-- Multi select without search but with remote data -->
 			<section>
-				<label for="select5_ajax">
+				<label for="select4_ajax">
 					Multi select without search but with remote data:
 				</label>
-				<select id="select5_ajax" name="select5_ajax" multiple></select>
+				<select id="select4_ajax" name="select4_ajax" multiple></select>
 				<input value="activate" id="activate_selectator5_ajax" type="button">
 				<script type="text/javascript">
 					$(function () {
@@ -524,14 +539,14 @@
 						};
 						var $activate_selectator = $('#activate_selectator5_ajax');
 						$activate_selectator.click(function () {
-							var $select = $('#select5_ajax');
+							var $select = $('#select4_ajax');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									useSearch: false,
 									load: function (search, callback) {
 										if (search.length < this.minSearchLength) return callback();
 										$.ajax({
-											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											url: 'https://sprotin.fo/dictionary_search_json.php?DictionaryId=3&DictionaryPage=1&SearchFor=tea&SearchInflections=0&SearchDescriptions=0&Group=&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
 											type: 'GET',
 											dataType: 'json',
 											success: function(data) {
@@ -544,7 +559,6 @@
 									},
 									placeholder: 'Search...',
 									delay: 300,
-									minSearchLength: 1,
 									valueField: 'Id',
 									textField: 'DisplayWord',
 									render: {
@@ -566,14 +580,14 @@
 					});
 				</script>
 			</section>
-	
-	
-			<!-- 5 -->
+
+
+			<!-- Multi select with keep open -->
 			<section>
-				<label for="select6">
+				<label for="select5">
 					Multi select with keep open:
 				</label>
-				<select id="select6" name="select6" multiple>
+				<select id="select5" name="select5" multiple>
 					<optgroup label="Group one" class="group_one">
 						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
 						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>
@@ -600,7 +614,7 @@
 					$(function () {
 						var $activate_selectator = $('#activate_selectator6');
 						$activate_selectator.click(function () {
-							var $select = $('#select6');
+							var $select = $('#select5');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									showAllOptionsOnFocus: true,
@@ -617,12 +631,13 @@
 					});
 				</script>
 			</section>
-	
+
+			<!-- Multi select with keep open and with remote data -->
 			<section>
-				<label for="select6_ajax">
+				<label for="select5_ajax">
 					Multi select with keep open and with remote data:
 				</label>
-				<select id="select6_ajax" name="select6_ajax" multiple></select>
+				<select id="select5_ajax" name="select5_ajax" multiple></select>
 				<input value="activate" id="activate_selectator6_ajax" type="button">
 				<script type="text/javascript">
 					$(function () {
@@ -638,7 +653,7 @@
 						};
 						var $activate_selectator = $('#activate_selectator6_ajax');
 						$activate_selectator.click(function () {
-							var $select = $('#select6_ajax');
+							var $select = $('#select5_ajax');
 							if ($select.data('selectator') === undefined) {
 								$select.selectator({
 									showAllOptionsOnFocus: true,
@@ -646,7 +661,7 @@
 									load: function (search, callback) {
 										if (search.length < this.minSearchLength) return callback();
 										$.ajax({
-											url: 'http://sprotin.fo/dictionary_search_json.php?DictionaryId=1&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchDescription=0&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
+											url: 'https://sprotin.fo/dictionary_search_json.php?DictionaryId=3&DictionaryPage=1&SearchFor=' + encodeURIComponent(search) + '&SearchInflections=0&SearchDescriptions=0&Group=&SkipOtherDictionariesResults=0&SkipSimilarWords=0',
 											type: 'GET',
 											dataType: 'json',
 											success: function(data) {
@@ -681,17 +696,16 @@
 					});
 				</script>
 			</section>
-	
-	
-			<!-- 6 -->
+
+			<!-- Inline markup initialized -->
 			<section>
-				<label for="select7">
+				<label for="select6">
 					Inline markup initialized
 				</label>
 				<label>
 					<small><em>&lt;select multiple class=&quot;selectator&quot; data-selectator-keep-open=&quot;true&quot; data-selectator-show-all-options-on-focus=&quot;true&quot; data-selectator-search-fields=&quot;value text subtitle right&quot;&gt;</em></small>
 				</label>
-				<select id="select7" name="select7" multiple class="selectator" data-selectator-keep-open="true" data-selectator-show-all-options-on-focus="true" data-selectator-search-fields="value text subtitle right">
+				<select id="select6" name="select6" multiple class="selectator" data-selectator-keep-open="true" data-selectator-show-all-options-on-focus="true" data-selectator-search-fields="value text subtitle right">
 					<optgroup label="Group one" class="group_one">
 						<option value="1" class="option_one" data-subtitle="The first option" data-left="images/ingi.png" data-right="1">One</option>
 						<option value="2" class="option_two" data-subtitle="The second option" data-left="images/runa.png" data-right="2">Two</option>

@@ -49,7 +49,7 @@
 				selected_item: function (_item, escape) {
 					var html = '';
 					if (typeof _item.left !== 'undefined')
-						html += '<div class="' + self.options.prefix + 'selected_item_left"><img src="' + escape(_item.left) + '"></div>';
+						html += '<div class="' + self.options.prefix + 'selected_item_left"><img src="' + escape(_item.left) + '" alt=""></div>';
 					if (typeof _item.right !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'selected_item_right">' + escape(_item.right) + '</div>';
 					html += '<div class="' + self.options.prefix + 'selected_item_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
@@ -61,7 +61,7 @@
 				option: function (_item, escape) {
 					var html = '';
 					if (typeof _item.left !== 'undefined')
-						html += '<div class="' + self.options.prefix + 'option_left"><img src="' + escape(_item.left) + '"></div>';
+						html += '<div class="' + self.options.prefix + 'option_left"><img src="' + escape(_item.left) + '" alt=""></div>';
 					if (typeof _item.right !== 'undefined')
 						html += '<div class="' + self.options.prefix + 'option_right">' + escape(_item.right) + '</div>';
 					html += '<div class="' + self.options.prefix + 'option_title">' + ((typeof _item.text !== 'undefined') ? escape(_item.text) : '') + '</div>';
@@ -114,7 +114,7 @@
 		self.init = function () {
 			self.options = $.extend(true, {}, defaults, _options);
 			$.each(self.$source_element.data(), function (_key, _value) {
-				if (_key.substring(0, 10) == 'selectator') {
+				if (_key.substring(0, 10) === 'selectator') {
 					self.options[_key.substring(10, 11).toLowerCase() + _key.substring(11)] = _value;
 				}
 			});
@@ -145,6 +145,9 @@
 			if (self.$source_element.attr('id') !== undefined) {
 				self.$container_element.attr('id', self.options.prefix + self.$source_element.attr('id'));
 			}
+			self.$container_element.on('touchleave touchcancel', function () {
+				alert('test');
+			});
 			self.$container_element.addClass(self.options.prefix + 'element ' + (is_multiple ? 'multiple ' : 'single ') + 'options-hidden');
 			if (!self.options.useSearch) {
 				self.$container_element.addClass('disable_search');
@@ -191,7 +194,7 @@
 				if (is_single) {
 					self.$input_element.attr('placeholder', self.options.labels.search);
 				} else {
-					if (self.options.placeholder !='') {
+					if (self.options.placeholder !== '') {
 						self.$input_element.attr('placeholder', self.options.placeholder);
 					}
 					self.$input_element.width(20);
@@ -351,6 +354,9 @@
 			self.$input_element.on('focus', function () {
 				self.$container_element.addClass('focused');
 				if (is_single || self.options.showAllOptionsOnFocus || !self.options.useSearch) {
+					if (!self.options.useSearch && using_remote_data) {
+						load()
+					}
 					showDropdown();
 				}
 			});
@@ -444,14 +450,14 @@
 					});
 					$.extend(data, $(this).data('item_data'));
 					$item_element.append(self.options.render.selected_item(data, escape));
-					if (is_single && (data[self.options.valueField] == '' || typeof data[self.options.valueField] === 'undefined' || self.$source_element.find('[value=""]').length === 0)) {
+					if (is_single && (data[self.options.valueField] === '' || typeof data[self.options.valueField] === 'undefined' || self.$source_element.find('[value=""]').length === 0)) {
 						$item_element.find('.' + self.options.prefix + 'selected_item_remove').remove();
 					}
-					self.$selecteditems_element.html($item_element);
+					self.$selecteditems_element.append($item_element);
 				}
 			});
 			if (is_single) {
-				if (self.options.placeholder != '' && (self.$source_element.val() === '' || self.$source_element.val() === null)) {
+				if (self.options.placeholder !== '' && (self.$source_element.val() === '' || self.$source_element.val() === null)) {
 					self.$selecteditems_element.empty();
 					self.$selecteditems_element.append('<div class="' + self.options.prefix + 'placeholder">' + self.options.placeholder + '</div>');
 				} else {
@@ -665,7 +671,7 @@
 				var has_visible_options = false;
 				$this.nextUntil('.' + self.options.prefix + 'group').each(function () {
 					var $option = $(this);
-					if ($option.css('display') != 'none') {
+					if ($option.css('display') !== 'none') {
 						has_visible_options = true;
 						return false;
 					}
@@ -809,7 +815,7 @@ $(function () {
 		var $this = $(this);
 		var options = {};
 		$.each($this.data(), function (_key, _value) {
-			if (_key.substring(0, 10) == 'selectator') {
+			if (_key.substring(0, 10) === 'selectator') {
 				options[_key.substring(10, 11).toLowerCase() + _key.substring(11)] = _value;
 			}
 		});
