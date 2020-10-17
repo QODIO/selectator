@@ -1,7 +1,7 @@
 /*
  Selectator jQuery Plugin
  A plugin for select elements
- version 3.2, Apr 9th, 2020
+ version 3.3, Oct 17th, 2020
  by Ingi á Steinamørk
 
  The MIT License (MIT)
@@ -362,19 +362,7 @@
 			self.$container_element.on('mousedown', '.' + self.options.prefix + 'selected_item_remove', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
-				var source_item_element = $(this).closest('.' + self.options.prefix + 'selected_item').data('source_item_element');
-				source_item_element.removeAttribute('selected');
-				source_item_element.selected = false;
-				if (is_single && self.$source_element.find('[value=""]').length) {
-					var noValueOption = self.$source_element.find('[value=""]')[0];
-					noValueOption.setAttribute('selected', '');
-					noValueOption.selected = true;
-				}
-				self.$source_element.trigger('change');
-				filterResults(self.usefilterResults);
-				renderOptions();
-				renderSelectedItems();
-				hideDropdown()
+				self.removeSelection()
 			});
 
 			// bind option events
@@ -773,6 +761,30 @@
 		// REFRESH PLUGIN
 		self.refresh = function () {
 			renderSelectedItems();
+		};
+
+
+		// REFRESH PLUGIN
+		self.hideDropdown = function () {
+			hideDropdown();
+		};
+
+
+		// REFRESH PLUGIN
+		self.removeSelection = function () {
+			var source_item_element = self.$container_element.find('.' + self.options.prefix + 'selected_item').data('source_item_element');
+			source_item_element.removeAttribute('selected');
+			source_item_element.selected = false;
+			if (is_single && self.$source_element.find('[value=""]').length) {
+				var noValueOption = self.$source_element.find('[value=""]')[0];
+				noValueOption.setAttribute('selected', '');
+				noValueOption.selected = true;
+			}
+			self.$source_element.trigger('change');
+			filterResults(self.usefilterResults);
+			renderOptions();
+			renderSelectedItems();
+			hideDropdown()
 		};
 
 

@@ -175,15 +175,22 @@ jQuery methods
 --------------
 Method             | Description
 ------------------ | -----------
+removeSelection    | This method is used to deselect current option, if applicable.
+hideDropdown       | This method is used to options dropdown.
 refresh            | This method is used to refresh the plugin. A scenario where this would be useful is if the data in the original select box is changed by some other script.
 destroy            | This method is used to remove the instance of the plugin from the select box and restore it to its original state.
 
 
 ###### Method usage
 ```javascript
+$('#selectBox').selectator('removeSelection');
+```
+```javascript
+$('#selectBox').selectator('hideDropdown');
+```
+```javascript
 $('#selectBox').selectator('refresh');
 ```
-or 
 ```javascript
 $('#selectBox').selectator('destroy');
 ```
