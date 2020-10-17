@@ -1,12 +1,12 @@
 /*
  Selectator jQuery Plugin
  A plugin for select elements
- version 3.0, Apr 8th, 2016
- by Ingi P. Jacobsen
+ version 3.2, Apr 9th, 2020
+ by Ingi á Steinamørk
 
  The MIT License (MIT)
 
- Copyright (c) 2013 Qodio
+ Copyright (c) 2013 QODIO
 
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
@@ -129,8 +129,6 @@
 			//// ================== CREATE ELEMENTS ================== ////
 			// mask
 			self.$mask_element = $('#' + self.options.prefix + 'mask');
-			// console.log(self.$mask_element.length);
-			// alert(self.$mask_element.length);
 			if (self.$mask_element.length === 0) {
 				self.$mask_element = $(document.createElement('div'));
 				self.$mask_element.attr('id', self.options.prefix + 'mask');
@@ -361,7 +359,9 @@
 			});
 
 			// bind selected item events
-			self.$container_element.on('mousedown', '.' + self.options.prefix + 'selected_item_remove', function () {
+			self.$container_element.on('mousedown', '.' + self.options.prefix + 'selected_item_remove', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
 				var source_item_element = $(this).closest('.' + self.options.prefix + 'selected_item').data('source_item_element');
 				source_item_element.removeAttribute('selected');
 				source_item_element.selected = false;
@@ -374,6 +374,7 @@
 				filterResults(self.usefilterResults);
 				renderOptions();
 				renderSelectedItems();
+				hideDropdown()
 			});
 
 			// bind option events
